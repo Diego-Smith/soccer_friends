@@ -4,6 +4,7 @@
 
 # Home page
 GET     /                           controllers.Application.index
+GET		/user/insert				controllers.Application.insert
 
 # Users
 #GET		/users/add					controllers.Users.add

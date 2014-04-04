@@ -1,0 +1,9 @@
+@(userList: List[User])
+
+<h1>User List</h1>
+<h2>@{userList.size}</h2>
+@{userList.map { x =>
+	<p>{x.name} - {x.password} - {x.id.getOrElse('-')}</p>
+	}}
+		
+	
