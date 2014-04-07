@@ -7,7 +7,7 @@ import slick.driver.H2Driver.backend.DatabaseDef
 import Database._
 import play.api.db.DB
 
-object UserService2 {
+object UserService2 {  //TODO: make a unique trait with UserService
   val users = TableQuery[Users]
   val db = Database.forDataSource(DB.getDataSource())
   def insertUser(user: User) = {
