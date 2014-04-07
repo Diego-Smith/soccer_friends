@@ -3,6 +3,7 @@ import scala.slick.lifted.ProvenShape.proveShapeOf
 import play.api.db.DB
 import play.api.db.slick.Config.driver.simple._
 import play.api.Play.current
+import play.api.db.slick.Config.driver.simple.Tag
 
 case class User(id: Option[Int] = None, name: String, password: String)
 
