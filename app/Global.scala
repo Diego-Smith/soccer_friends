@@ -14,5 +14,4 @@ object Global extends GlobalSettings with StartupTableFiller {
     //    insertUser(User(None,"test","test"))
     fillUserTable
   }
-
 }

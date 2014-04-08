@@ -15,4 +15,5 @@ trait StartupTableFiller {
     insertUser(User(None,"diego","gmail2.com"))
     insertUser(User(None,"gmail","gmail2.com"))
   }
+  
 }

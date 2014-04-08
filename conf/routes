@@ -12,4 +12,7 @@ GET		/user/insert				controllers.Application.insert
 
 
 # Map static resources from the /public folder to the /assets URL path
+GET     /assets/img/glyphicons-halflings-white.png      controllers.Assets.at(path="/public", file="/images/glyphicons-halflings-white.png")
+GET     /assets/img/glyphicons-halflings.png            controllers.Assets.at(path="/public", file="/images/glyphicons-halflings.png")
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
