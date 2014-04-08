@@ -4,7 +4,12 @@
 
 # Home page
 GET     /                           controllers.Application.index
+POST	/login						controllers.Application.login
+
+#User
 GET		/user/insert				controllers.Application.insert
+GET		/user/hello/:username/:password controllers.Application.helloUser(username, password)
+
 
 # Users
 #GET		/users/add					controllers.Users.add

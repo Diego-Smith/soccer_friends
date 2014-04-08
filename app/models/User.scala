@@ -5,7 +5,7 @@ import play.api.db.slick.Config.driver.simple._
 import play.api.Play.current
 import play.api.db.slick.Config.driver.simple.Tag
 
-case class User(id: Option[Int] = None, name: String, password: String)
+case class User(id: Option[Int] = None, username: String, password: String)
 
 class Users(tag: Tag) extends Table[User](tag, "USER") {
   // Auto Increment the id primary key column
