@@ -7,7 +7,7 @@
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")" />
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/responsive.min.css")" />
 
-
+@import it.sf.controllers.routes.Application
 
 <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
@@ -39,7 +39,7 @@
             <form class="navbar-form pull-right">
               <input class="span2" type="text" placeholder="Email">
               <input class="span2" type="password" placeholder="Password">
-              <a class="btn" href="@routes.Application.index">login</a>
+ <a class="btn" href="@Application.index">login</a>
               <button type="submit" class="btn">Sign in</button>
             </form>
           </div><!--/.nav-collapse -->

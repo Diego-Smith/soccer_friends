@@ -2,13 +2,18 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+
 # Home page
-GET     /                           controllers.Application.index
-POST	/login						controllers.Application.login
+GET     /                           it.sf.controllers.Application.index
+POST	/login						it.sf.controllers.Application.login
 
 #User
-GET		/user/insert				controllers.Application.insert
-GET		/user/hello/:username/:password controllers.Application.helloUser(username, password)
+GET		/user/insert				it.sf.controllers.Application.insert
+GET		/user/hello/:username/:password it.sf.controllers.Application.helloUser(username, password)
+
+#Category
+GET		/category/insert/:name			it.sf.controllers.CategoryController.testAddCategory(name)
+GET		/category/list				it.sf.controllers.CategoryController.listCategories
 
 
 # Users
