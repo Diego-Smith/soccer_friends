@@ -4,7 +4,6 @@ import play.api._
 import play.api.mvc._
 import it.sf.service.UserService
 import it.sf.models.User
-import it.sf.service.UserService
 
 object Application extends Controller with UserService {
 

@@ -36,14 +36,33 @@ trait UserService {
     }
   }
 
-  def insertUser(user: User) = {
-    play.api.db.slick.DB.withSession {
-      implicit session: Session =>
-        val num = users += user
-        num
+  def insertUser(user: User): Integer = {
+    validateUser(user) match {
+      case (true, _) => {
+    	  play.api.db.slick.DB.withSession {
+    		  implicit session: Session =>
+    	  users += user
+    	  }
+      }
+      case _ => 0
+    }
+  }
+  
+  def validateUser(user: User) : UserValidation = {
+    user match {
+      case User(None, username, password) => {
+        if (username.isEmpty() || password.isEmpty()) {
+          (false, "Wrong values")
+        } else {
+          (true, "")
+        }
+      }
+      case _ => (false, "Wrong values")
     }
   }
 
+  type UserValidation = (Boolean, String)
+  
   def getUsersList() = {
     play.api.db.slick.DB.withSession {
       implicit session: Session =>

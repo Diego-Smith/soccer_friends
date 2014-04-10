@@ -15,6 +15,9 @@ GET		/user/hello/:username/:password it.sf.controllers.Application.helloUser(use
 GET		/category/insert/:name			it.sf.controllers.CategoryController.testAddCategory(name)
 GET		/category/list				it.sf.controllers.CategoryController.listCategories
 
+#Registration
+GET		/register					it.sf.controllers.RegistrationController.register
+POST	/register						it.sf.controllers.RegistrationController.submitLogin
 
 # Users
 #GET		/users/add					controllers.Users.add

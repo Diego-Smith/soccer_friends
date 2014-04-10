@@ -1,0 +1,10 @@
+@(userForm: Form[it.sf.controllers.UserData])
+
+@import helper._
+@import it.sf.controllers.routes.RegistrationController
+@helper.form(action = RegistrationController.submitLogin) {
+  @helper.inputText(userForm("name"))
+  @helper.inputPassword(userForm("password"))
+          <button type="submit" id="loginbutton" class="button-link">Entra</button>
+}
+
