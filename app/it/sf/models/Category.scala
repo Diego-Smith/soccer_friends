@@ -1,7 +1,6 @@
 package it.sf.models
 
 import play.api.db.slick.Config.driver.simple._
-import scala.slick.lifted.TableQuery
 import play.api.db.slick.Config.driver.simple.Tag
 
 case class Category(id: Option[Int] = None, name: String)
