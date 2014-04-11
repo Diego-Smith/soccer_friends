@@ -4,6 +4,7 @@ import play.api.Play.current
 import it.sf.models.Users
 import it.sf.models.User
 import play.api.db.slick._
+import play.api.db.slick.Session
 
 trait UserService {
   val users = TableQuery[Users]
