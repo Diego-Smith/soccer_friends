@@ -15,6 +15,11 @@ trait UserService {
       users.filter(user => user.username === username && user.password === password).firstOption
   }
 
+  def findUserById(id: Int) = DB.withSession {
+    implicit  session: Session =>
+      users.filter(_.id === id).firstOption
+  }
+
   def findUserByUsername(username: String): Option[User] = DB.withSession {
     implicit session: Session =>
       users.filter(_.username === username).firstOption

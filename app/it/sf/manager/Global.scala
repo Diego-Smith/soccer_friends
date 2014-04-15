@@ -5,7 +5,7 @@ import it.sf.conf.StartupTableFiller
 object Global extends GlobalSettings {
   override def onStart(app: Application) {
     println("hello ---- PLAY");
-//    lazy val database = Database.forDataSource(DB.getDataSource())
+    //    lazy val database = Database.forDataSource(DB.getDataSource())
 
     StartupTableFiller.fillUserTable
     StartupTableFiller.fillCategories

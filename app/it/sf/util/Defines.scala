@@ -13,7 +13,7 @@ object Defines {
   /**
    *   USER
    */  
-  lazy val DEFAULT_USER_ID = 0  
+  lazy val DEFAULT_USER_ID: Int = 0
     
   /**
    * WEB_PAGES
