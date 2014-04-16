@@ -16,7 +16,7 @@ trait ApplicationLoggerImpl extends ApplicationLogger {
 }
 
 //trait OttoliniLogger {
-//  private val LOG_PREFIX = "**ottoCulo** "
+//  private val LOG_PREFIX = "**o** "
 //  def mLog(stringToLog: String) = {
 //    println(
 //      stringToLog.split("\n").map(s => s.mkString(LOG_PREFIX, "", "\n")).mkString("---->>>>>>>>\n", "", "<<<<<<<<----\n"))

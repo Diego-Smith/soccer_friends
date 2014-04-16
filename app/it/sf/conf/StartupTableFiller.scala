@@ -2,7 +2,7 @@ package it.sf.conf
 
 import it.sf.logger.ApplicationLoggerImpl
 import play.api.Play.current
-import it.sf.models.{Categories, Category, Users, User}
+import it.sf.models.{CategoryTable, Category, UserTable, User}
 import scala.slick.driver.H2Driver.simple._
 import slick.driver.H2Driver.backend.DatabaseDef
 import Database._
@@ -12,7 +12,7 @@ object StartupTableFiller extends ApplicationLoggerImpl {
   val db: DatabaseDef = Database.forDataSource(DB.getDataSource())
 
   def fillUserTable() = {
-    val users = TableQuery[Users]
+    val users = TableQuery[UserTable]
     db.withDynSession {
       users += User(None, "user1", "user1@gmail.com")
       users += User(None, "user1", "user1@gmail.com")
@@ -21,7 +21,7 @@ object StartupTableFiller extends ApplicationLoggerImpl {
   }
 
   def fillCategories {
-    val categories = TableQuery[Categories]
+    val categories = TableQuery[CategoryTable]
     db.withDynSession {
       categories += Category(None, "book")
       categories += Category(None, "school")

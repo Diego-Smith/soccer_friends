@@ -1,16 +1,23 @@
 @(userForm: Form[it.sf.controllers.UserData], actionToPerform: String)
 
 @import helper._
-@import it.sf.controllers.routes.RegistrationController
+@import it.sf.controllers.routes.RegistrationController.{postLogin, postRegister}
 
 @actionCall = @{
-    if("login".equals(actionToPerform)) RegistrationController.postLogin else RegistrationController.postRegister
+    if("login".equals(actionToPerform)) postLogin else postRegister
 }
 
-@helper.form(action = actionCall) {
-  @helper.inputText(userForm("name"))
-  @helper.inputPassword(userForm("password"))
-  <button type="submit" id="loginbutton" class="button-link">Entra</button>
+@helper.form(actionCall) {
+    @helper.inputText(userForm("name"))
+    @helper.inputPassword(userForm("password"))
+
+    @userForm.globalError.map { error =>
+    <p class="error">
+        @error.message
+    </p>
+    }
+
+    <button type="submit" id="loginbutton" class="button-link">Entra</button>
 }
 
 
