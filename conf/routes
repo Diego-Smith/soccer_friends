@@ -28,7 +28,5 @@ POST	/register						it.sf.controllers.RegistrationController.postRegister
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/img/glyphicons-halflings-white.png      controllers.Assets.at(path="/public", file="/images/glyphicons-halflings-white.png")
-GET     /assets/img/glyphicons-halflings.png            controllers.Assets.at(path="/public", file="/images/glyphicons-halflings.png")
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
-
+GET     /webjars/*file                    controllers.WebJarAssets.at(file)
