@@ -8,8 +8,6 @@ object Global extends GlobalSettings with ApplicationLoggerImpl {
     logConsole("Application Started")
     //    lazy val database = Database.forDataSource(DB.getDataSource())
 
-    StartupTableFiller.fillUserTable
-    StartupTableFiller.fillCategories
-
+    StartupTableFiller.startupFill
   }
 }
