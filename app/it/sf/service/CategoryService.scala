@@ -17,8 +17,11 @@ trait CategoryService {
     }
   }
 
-  def insert(category: Category)(implicit session: Session) = {
-    categories += category
+  def insert(category: Category) = {
+    play.api.db.slick.DB.withSession {
+      implicit session: Session =>
+        categories += category
+    }
   }
 
   def list: List[Category] = {

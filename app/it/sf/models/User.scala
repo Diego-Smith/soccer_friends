@@ -17,5 +17,6 @@ class UserTable(tag: Tag) extends Table[User](tag, "USER") {
 
   // the * projection (e.g. select * ...) auto-transform the tupled column values to / from a User
   def * = (id.?, username, password) <>(User.tupled, User.unapply)
+  def usernameUnique = index("UNIQUE_USERNAME", username, unique = true)
 }
 
