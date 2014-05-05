@@ -5,10 +5,8 @@ import play.api.Play.current
 import it.sf.models._
 import scala.slick.driver.H2Driver.simple._
 import slick.driver.H2Driver.backend.DatabaseDef
-import Database._
 import play.api.db.DB
 import it.sf.service.{UserService, CategoryService, FriendshipService}
-import it.sf.models.User
 import it.sf.models.Category
 
 object StartupTableFiller extends ApplicationLoggerImpl with UserService with CategoryService with FriendshipService {
@@ -28,16 +26,16 @@ object StartupTableFiller extends ApplicationLoggerImpl with UserService with Ca
     insertUser("diego", "diego")
   }
 
-  def fillCategories {
+  def fillCategories() {
 
 //    val categoryService = new CategoryService {}
 
-    insert(Category(None, "book"))
-    insert(Category(None, "school"))
-    insert(Category(None, "sport"))
+    insertCategory(Category(None, "book"))
+    insertCategory(Category(None, "school"))
+    insertCategory(Category(None, "sport"))
   }
 
-  def fillFriendship {
+  def fillFriendship() {
 //    val friendshipService = new FriendshipService {}
     insertFriendship(Friendship(None, 1, 2))
     insertFriendship(Friendship(None, 2, 1))
