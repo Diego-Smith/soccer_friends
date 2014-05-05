@@ -28,9 +28,9 @@ trait FriendshipService {
       play.api.db.slick.DB.withSession {
         implicit session: Session =>
           val result = (friendShips returning friendShips.map(_.id)) += correctValue
-          FriendshipInsertResult(Some(Friendship(Some(result),correctValue.idUserA, correctValue.idUserB)), true)
+          FriendshipInsertResult(Some(Friendship(Some(result),correctValue.idUserA, correctValue.idUserB)), result = true)
       }
-    case _ => FriendshipInsertResult(None, false)
+    case _ => FriendshipInsertResult(None, result = false)
   }
 }
 

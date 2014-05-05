@@ -1,32 +1,29 @@
 package it.sf.manager
 
 import it.sf.logger.ApplicationLoggerImpl
-import play.mvc.Http
-import scala.collection.mutable.Map
 
 import it.sf.models.{PageVisited, User}
 import play.api.mvc.Request
 import play.api.mvc.Session
 import it.sf.util.Defines
 import it.sf.service.{PageVisitedService, UserService}
+import scala.collection.mutable
 
 /**
  * Created by diego on 11/04/14.
  */
 object SessionManager extends ApplicationLoggerImpl with UserService with PageVisitedService {
-  var map = Map[String, Object]()
+  var map = mutable.Map[String, Object]()
 
-  private def addSession(key: String, value: Object) = {
-    key match {
-      case null => {
-        null
-      }
-      case a => {
-        val session = Http.Context.current().session()
-        map.put(key, value)
-      }
-    }
-  }
+//  private def addSession(key: String, value: Object) = {
+//    key match {
+//      case null =>
+//        null
+//      case a =>
+//        //        val session = Http.Context.current().session()
+//        map.put(key, value)
+//    }
+//  }
 
   def logWebPage(webPage: String, request: Request[play.api.mvc.AnyContent]) {
     val idUser: Option[Int] = SessionManager.getUserSession(request.session) match {

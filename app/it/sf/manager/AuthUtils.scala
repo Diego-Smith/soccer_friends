@@ -11,8 +11,8 @@ object AuthUtils extends UserService {
     val query = request.queryString.map {
       case (k, v) => k -> v.mkString
     }
-    val username = query get ("username")
-    val password = query get ("password")
+    val username = query get "username"
+    val password = query get "password"
 
     (username, password) match {
       case (Some(u), Some(p)) => findUserByUsername(u, p)

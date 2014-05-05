@@ -6,7 +6,7 @@ import play.api.db.slick.Config.driver.simple._
 import it.sf.service.UserService
 import java.util.Calendar
 
-case class PageVisited(id: Option[Int] = None, pagename: String, ip: String, val dateVisited: Date = new Date(Calendar.getInstance().getTimeInMillis()),
+case class PageVisited(id: Option[Int] = None, pagename: String, ip: String, dateVisited: Date = new Date(Calendar.getInstance().getTimeInMillis),
                        fkUser: Option[Int] = None)
 
 class PageVisitedTable(tag: Tag) extends Table[PageVisited](tag, "PAGE_VISITED") with UserService {
