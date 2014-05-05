@@ -1,6 +1,5 @@
 package it.external.tryout
 
-import scala.collection.immutable.SortedSet
 
 object ShuffleDeck {
 
@@ -10,7 +9,7 @@ object ShuffleDeck {
   
   implicit class CardRapr(val card: (ShuffleDeck.CardValue.Value, ShuffleDeck.Seed.Value)) {
     @Override
-    override def toString() = s"${card._1} of ${card._2}"
+    override def toString = s"${card._1} of ${card._2}"
     def test = s"${card._1} of ${card._2}"
   }
   
@@ -45,10 +44,9 @@ object ShuffleDeck {
     else {
       traversableHands match {
         case List() => traversableHands
-        case head :: tail => {
+        case head :: tail =>
           val split = traversableHands.head.splitAt(5)
           giveCardsRecursion(List(split._2, split._1) ::: tail, recursion - 1)
-        }
       }
     }
   }

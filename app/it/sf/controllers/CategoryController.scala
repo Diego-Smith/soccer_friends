@@ -15,12 +15,12 @@ object CategoryController extends Controller with CategoryService {
 
   def listCategories() = Action {
     val categories = list
-    Ok(s"Categorie: \n\n${categories.map(_.name).mkString("\n")}")
+    Ok(s"Categories: \n\n${categories.map(_.name).mkString("\n")}")
   }
 
   def randomInsert() = {
     val numIterations = Random.nextInt(10) + 1
-    val range = (0 to numIterations)
+    val range = 0 to numIterations
     val strings = for {
       a <- 0 to numIterations
       number = Random.nextInt(8) + 3

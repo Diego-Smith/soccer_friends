@@ -16,7 +16,7 @@ object Application extends Controller with UserService {
   }
 
   def insert = Action {
-    val user = User(None, "diego", "prova")
+    val user = User(None, "diego", "test")
     insertUser(user)
     val userList = getUsersList
     Ok(views.html.user.list(userList))
@@ -30,7 +30,7 @@ object Application extends Controller with UserService {
   }
 
   def AuthMe(username: String, password: String)(f: User => Result) = Action {
-    logger.info(s"Authing user(username: $username - password: $password)")
+    logger.info(s"Authenticating user(username: $username - password: $password)")
     val user: Option[User] = findUserByUsername(username.trim(), password.trim())
     user match {
       case Some(someUser) => f(someUser)

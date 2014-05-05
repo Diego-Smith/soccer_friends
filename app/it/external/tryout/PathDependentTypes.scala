@@ -51,9 +51,11 @@ object AwesomeDB {
   }
 }
 import AwesomeDB.Key
+import scala.collection.mutable
+
 class AwesomeDB {
   import collection.mutable.Map
-  val data = Map.empty[Key, Any]
+  val data = mutable.Map.empty[Key, Any]
   def get(key: Key): Option[key.Value] = data.get(key).asInstanceOf[Option[key.Value]]
   def set(key: Key)(value: key.Value): Unit = data.update(key, value)
 }
