@@ -11,7 +11,7 @@ import it.sf.service.{UserService, CategoryService, FriendshipService}
 import it.sf.models.User
 import it.sf.models.Category
 
-object StartupTableFiller extends ApplicationLoggerImpl {
+object StartupTableFiller extends ApplicationLoggerImpl with UserService with CategoryService with FriendshipService {
   def db: DatabaseDef = Database.forDataSource(DB.getDataSource())
 
   def startupFill() = {
@@ -22,24 +22,24 @@ object StartupTableFiller extends ApplicationLoggerImpl {
   }
 
   def fillUserTable() = {
-    val userService = new UserService {}
-    userService.insertUser("user1", "user1@gmail.com")
-    userService.insertUser("user2", "user1@gmail.com")
-    userService.insertUser("diego", "diego")
+//    val userService = new UserService {}
+    insertUser("user1", "user1@gmail.com")
+    insertUser("user2", "user1@gmail.com")
+    insertUser("diego", "diego")
   }
 
   def fillCategories {
 
-    val categoryService = new CategoryService {}
+//    val categoryService = new CategoryService {}
 
-    categoryService.insert(Category(None, "book"))
-    categoryService.insert(Category(None, "school"))
-    categoryService.insert(Category(None, "sport"))
+    insert(Category(None, "book"))
+    insert(Category(None, "school"))
+    insert(Category(None, "sport"))
   }
 
   def fillFriendship {
-    val friendshipService = new FriendshipService {}
-    friendshipService.insertFriendship(Friendship(None, 1, 2))
-    friendshipService.insertFriendship(Friendship(None, 2, 1))
+//    val friendshipService = new FriendshipService {}
+    insertFriendship(Friendship(None, 1, 2))
+    insertFriendship(Friendship(None, 2, 1))
   }
 }
