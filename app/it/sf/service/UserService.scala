@@ -17,7 +17,7 @@ trait UserService extends ApplicationLoggerImpl {
   }
 
   def findUserById(id: Int) = DB.withSession {
-    implicit  session: Session =>
+    implicit session: Session =>
       users.filter(_.id === id).firstOption
   }
 
@@ -29,24 +29,25 @@ trait UserService extends ApplicationLoggerImpl {
   def insertUser(user: User): UserValidation = validateUser(user) match {
     case (true, reason) => {
       play.api.db.slick.DB.withSession {
-        implicit session: Session =>
-          users += user
-          (true, reason)
+        implicit session: Session => {
+          val result = (users returning users.map(_.id)) += user
+            UserValidation(true, Some(user.copy(id = Some(result))), reason)
+        }
       }
     }
-    case (false, reason) => (false, reason)
+    case (false, reason) => UserValidation(false, None, reason)
   }
 
   def insertUser(username: String, password: String): UserValidation = {
-    val user = User(None,username,password)
+    val user = User(None, username, password)
     insertUser(user)
   }
 
-  def validateUser(user: User): UserValidation = {
+  def validateUser(user: User) = {
     val checkedUser = findUserByUsername(user.username)
     if (!checkedUser.isEmpty) {
       logConsole(s"User ${user.username} already exists")
-      (false, "User already exists")
+      (false, s"User ${user.username} already exists")
     } else {
       user match {
         case User(None, username, password) => {
@@ -61,8 +62,6 @@ trait UserService extends ApplicationLoggerImpl {
     }
   }
 
-  type UserValidation = (Boolean, String)
-
   def getUsersList() = DB.withSession {
     implicit session: Session =>
       users.list
@@ -70,3 +69,5 @@ trait UserService extends ApplicationLoggerImpl {
   }
 
 }
+
+case class UserValidation(result: Boolean, user: Option[User], errorMessage: String)

@@ -2,7 +2,7 @@ package it.sf.service
 
 import play.api.db.slick.Config.driver.simple._
 import play.api.Play.current
-import it.sf.models.{Friendship, FriendshipTable, PageVisitedTable, PageVisited}
+import it.sf.models.{Friendship, FriendshipTable}
 import play.api.db.slick.Session
 
 trait FriendshipService {
@@ -16,19 +16,22 @@ trait FriendshipService {
     }
   }
 
-  def friendshiplist : List[Friendship] = {
+  def friendshiplist: List[Friendship] = {
     play.api.db.slick.DB.withSession {
       implicit session: Session =>
-      friendShips.list
+        friendShips.list
     }
   }
 
-  def insertFriendship(friendship: Friendship): Integer = validateFriendshipAndReturnCorrectValue(friendship) match {
+  def insertFriendship(friendship: Friendship): FriendshipInsertResult = validateFriendshipAndReturnCorrectValue(friendship) match {
     case (true, correctValue) =>
       play.api.db.slick.DB.withSession {
         implicit session: Session =>
-          friendShips += correctValue
+          val result = (friendShips returning friendShips.map(_.id)) += correctValue
+          FriendshipInsertResult(Some(Friendship(Some(result),correctValue.idUserA, correctValue.idUserB)), true)
       }
-    case _ => 0
+    case _ => FriendshipInsertResult(None, false)
   }
 }
+
+case class FriendshipInsertResult(friendship: Option[Friendship], result: Boolean)

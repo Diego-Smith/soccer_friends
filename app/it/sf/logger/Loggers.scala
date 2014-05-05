@@ -14,11 +14,3 @@ trait ApplicationLoggerImpl extends ApplicationLogger {
       text.split("\n").map(s => s.mkString(LOG_ROW_PREFIX, "", "\n")).mkString(LOG_PREFIX, "", LOG_POSTFIX))
   }
 }
-
-//trait OttoliniLogger {
-//  private val LOG_PREFIX = "**o** "
-//  def mLog(stringToLog: String) = {
-//    println(
-//      stringToLog.split("\n").map(s => s.mkString(LOG_PREFIX, "", "\n")).mkString("---->>>>>>>>\n", "", "<<<<<<<<----\n"))
-//  }
-//}

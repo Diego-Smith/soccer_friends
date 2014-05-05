@@ -20,7 +20,6 @@ class PageVisitedTable(tag: Tag) extends Table[PageVisited](tag, "PAGE_VISITED")
 
   def fkUser = column[Int]("ID_USER")
 
-  // the * projection (e.g. select * ...) auto-transform the tupled column values to / from a User
   def * = (id.?, pagename, ip, date, fkUser.?) <>(PageVisited.tupled, PageVisited.unapply)
 
   def user = foreignKey("FK_USER", fkUser, users)(_.id)
