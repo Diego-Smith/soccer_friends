@@ -38,6 +38,6 @@ object StartupTableFiller extends ApplicationLoggerImpl with UserService with Ca
   def fillFriendship() {
 //    val friendshipService = new FriendshipService {}
     insertFriendship(Friendship(None, 1, 2))
-    insertFriendship(Friendship(None, 2, 1))
+//    insertFriendship(Friendship(None, 2, 1))
   }
 }
