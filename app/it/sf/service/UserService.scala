@@ -16,7 +16,7 @@ trait UserService extends ApplicationLoggerImpl {
       users.filter(user => user.username === username && user.password === password).firstOption
   }
 
-  def findUserById(id: Int) = DB.withSession {
+  def findUserById(id: Int) : Option[User] = DB.withSession {
     implicit session: Session =>
       users.filter(_.id === id).firstOption
   }

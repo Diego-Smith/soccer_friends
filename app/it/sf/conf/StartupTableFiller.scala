@@ -10,10 +10,10 @@ import it.sf.service.{UserService, CategoryService, FriendshipService}
 import it.sf.models.Category
 
 object StartupTableFiller extends ApplicationLoggerImpl with UserService with CategoryService with FriendshipService {
-  def db: DatabaseDef = Database.forDataSource(DB.getDataSource())
+  def obtainDB: DatabaseDef = Database.forDataSource(DB.getDataSource())
 
   def startupFill() = {
-    db
+    obtainDB
     fillUserTable
     fillCategories
     fillFriendship
@@ -37,7 +37,7 @@ object StartupTableFiller extends ApplicationLoggerImpl with UserService with Ca
 
   def fillFriendship() {
 //    val friendshipService = new FriendshipService {}
-    insertFriendship(Friendship(None, 1, 2))
+    insertFriendship(1,2)
 //    insertFriendship(Friendship(None, 2, 1))
   }
 }

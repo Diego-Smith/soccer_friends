@@ -11,13 +11,15 @@ version := "1.0-SNAPSHOT"
 libraryDependencies ++= Seq(
   //jdbc,
   //anorm,
-    cache,
+  cache,
   "com.typesafe.play" %% "play-slick" % "0.6.0.1",
-  "org.webjars"   %% "webjars-play"  % "2.2.0",
+  "org.webjars" %% "webjars-play" % "2.2.0",
   // Downgrade to JQuery 1.8.3 so that integration tests with HtmlUnit work.
   "org.webjars" % "bootstrap" % "3.0.0" exclude("org.webjars", "jquery"),
-  "org.webjars" % "jquery" % "1.8.3"
+  "org.webjars" % "jquery" % "1.8.3",
+  "org.scalacheck" %% "scalacheck" % "1.11.3" % "test"
 )
+
 
 //LessKeys.compress in Assets := false
 
