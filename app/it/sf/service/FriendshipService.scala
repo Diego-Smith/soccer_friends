@@ -4,6 +4,7 @@ import play.api.db.slick.Config.driver.simple._
 import play.api.Play.current
 import it.sf.models.{User, FriendshipTable, Friendship}
 import play.api.db.slick.Session
+import scala.language.implicitConversions
 
 trait FriendshipService extends UserService  {
   val friendShips = TableQuery[FriendshipTable]

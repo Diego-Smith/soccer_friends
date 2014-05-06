@@ -21,8 +21,8 @@ trait UserService extends ApplicationLoggerImpl {
       users.filter(_.id === id).firstOption
   }
 
-  class UserIdList[Int](val source: Seq[scala.Int]) extends UserService {
-    def getUsers() : Seq[User] = {
+  class UserIdList[Int](val source: Seq[scala.Int]) {
+    def getUsers: Seq[User] = {
       findUsers(source)
     }
   }

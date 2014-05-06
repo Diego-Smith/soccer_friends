@@ -7,6 +7,7 @@ name := "soccer_friends"
 version := "1.0-SNAPSHOT"
 
 //lazy val root = (project in file(".")).addPlugins(SbtWeb)
+scalacOptions ++= Seq("-feature")
 
 libraryDependencies ++= Seq(
   //jdbc,
