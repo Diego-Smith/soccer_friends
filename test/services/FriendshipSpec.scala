@@ -6,9 +6,8 @@ import org.specs2.mutable._
 import org.specs2.runner._
 
 import play.api.test._
-import play.api.test.Helpers._
-import it.sf.service.{UserValidation, UserService, FriendshipService}
-import it.sf.models.{Friendship, User}
+import it.sf.service.{UserService, FriendshipService}
+import it.sf.models.Friendship
 import org.specs2.ScalaCheck
 
 
@@ -18,7 +17,7 @@ import org.specs2.ScalaCheck
  * For more information, consult the wiki.
  */
 @RunWith(classOf[JUnitRunner])
-class FriendshipSpec extends Specification {
+class FriendshipSpec extends Specification with ScalaCheck {
 
   "Friendship Service" should {
 
@@ -54,11 +53,11 @@ class FriendshipSpec extends Specification {
       val user5 = userService.insertUser("u5", "pass2").user
       val user6 = userService.insertUser("u6", "pass2").user
 
-      friendshipService.insertFriendship(Friendship(None, user1.get.id.get, user2.get.id.get)).friendship
-      friendshipService.insertFriendship(Friendship(None, user1.get.id.get, user3.get.id.get)).friendship
-      friendshipService.insertFriendship(Friendship(None, user1.get.id.get, user4.get.id.get)).friendship
-      friendshipService.insertFriendship(Friendship(None, user1.get.id.get, user5.get.id.get)).friendship
-      friendshipService.insertFriendship(Friendship(None, user1.get.id.get, user6.get.id.get)).friendship
+      friendshipService.insertFriendship(user1.get.id.get, user2.get.id.get).friendship
+      friendshipService.insertFriendship(user1.get.id.get, user3.get.id.get).friendship
+      friendshipService.insertFriendship(user1.get.id.get, user4.get.id.get).friendship
+      friendshipService.insertFriendship(user1.get.id.get, user5.get.id.get).friendship
+      friendshipService.insertFriendship(user1.get.id.get, user6.get.id.get).friendship
 
       val friends = friendshipService.getFriends(user1.get.id.get)
       friends must size(5)

@@ -21,6 +21,21 @@ trait UserService extends ApplicationLoggerImpl {
       users.filter(_.id === id).firstOption
   }
 
+  class UserIdList[Int](val source: Seq[scala.Int]) extends UserService {
+    def getUsers() : Seq[User] = {
+      findUsers(source)
+    }
+  }
+
+  def findUsers(ids: Seq[Int]) : Seq[User] = DB.withSession {
+    implicit session: Session =>
+      val q = for {
+        u <- users
+        if u.id inSetBind ids
+      } yield u
+      q.list
+  }
+
   def findUserByUsername(username: String): Option[User] = DB.withSession {
     implicit session: Session =>
       users.filter(_.username === username).firstOption
