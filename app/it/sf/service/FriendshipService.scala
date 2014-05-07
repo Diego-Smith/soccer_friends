@@ -24,16 +24,11 @@ trait FriendshipService extends UserService  {
 
   implicit def listToUserIdList[Int](input: Seq[scala.Int]) = new UserIdList(input)
 
+  //TODO: compile query?
   def getFriends(userId: Int): Seq[User] = play.api.db.slick.DB.withSession {
     implicit session: Session =>
-      //      val q1 = friendShips.filter(_.fkUserA === userId).map(_.fkUserB)
-      //      val q2 = friendShips.filter(_.fkUserB === userId).map(_.fkUserA)
-      //      val idUsers: Seq[Int] = (q1 ++ q2).run
-      //      idUsers.map(findUserById).flatten
-
-      (friendShips.filter(_.fkUserA === userId).map(_.fkUserB) ++ friendShips.filter(_.fkUserB === userId).map(_.fkUserA)).run.getUsers
+    (friendShips.filter(_.fkUserA === userId).map(_.fkUserB) ++ friendShips.filter(_.fkUserB === userId).map(_.fkUserA)).run.getUsers
   }
 }
-//TODO: compile query?
 
 case class FriendshipInsertResult(friendship: Option[Friendship], result: Boolean)

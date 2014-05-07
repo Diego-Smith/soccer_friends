@@ -2,14 +2,11 @@ package services
 
 
 import org.junit.runner.RunWith
-import org.specs2.mutable._
-import org.specs2.runner._
-
-import play.api.test._
-import it.sf.service.{UserService, FriendshipService}
-import it.sf.models.Friendship
+import it.sf.service.{FriendshipService, UserService}
 import org.specs2.ScalaCheck
-
+import play.api.test.WithApplication
+import org.specs2.runner.JUnitRunner
+import org.specs2.mutable.Specification
 
 /**
  * Add your spec here.
@@ -21,27 +18,6 @@ class FriendshipSpec extends Specification with ScalaCheck {
 
   "Friendship Service" should {
 
-//    "insert correctly the friendship record" in new WithApplication() {
-//
-//      val friendshipService = new FriendshipService {}
-//      val userService = new UserService {}
-//
-//      val user1 = userService.insertUser("u1", "pass").user
-//      val user2 = userService.insertUser("u2", "pass2").user
-//      val user3Result : UserValidation = userService.insertUser("u2", "pass2")
-//      val user3 = user3Result.user
-//      user1 must not be empty
-//      user2 must not be empty
-//      user3 must empty
-//
-//      friendshipService.insertFriendship(Friendship(None, user1.get.id.get, user2.get.id.get)).friendship
-//      val friendship1 = friendshipService.insertFriendship(Friendship(None, user2.get.id.get, user1.get.id.get)).friendship
-//
-//      friendship must not be none
-//      friendship1 must not be none
-//
-//      friendship.get.idUserA mustEqual friendship1.get.idUserA
-//    }
 
     "get Correct Friends" in new WithApplication() {
       val friendshipService = new FriendshipService {}
@@ -53,17 +29,18 @@ class FriendshipSpec extends Specification with ScalaCheck {
       val user5 = userService.insertUser("u5", "pass2").user
       val user6 = userService.insertUser("u6", "pass2").user
 
-      friendshipService.insertFriendship(user1.get.id.get, user2.get.id.get).friendship
-      friendshipService.insertFriendship(user1.get.id.get, user3.get.id.get).friendship
-      friendshipService.insertFriendship(user1.get.id.get, user4.get.id.get).friendship
-      friendshipService.insertFriendship(user1.get.id.get, user5.get.id.get).friendship
-      friendshipService.insertFriendship(user1.get.id.get, user6.get.id.get).friendship
+      friendshipService.insertFriendship(user1.get.id.get, user2.get.id.get)
+      friendshipService.insertFriendship(user1.get.id.get, user3.get.id.get)
+      friendshipService.insertFriendship(user1.get.id.get, user4.get.id.get)
+      friendshipService.insertFriendship(user1.get.id.get, user5.get.id.get)
+      friendshipService.insertFriendship(user1.get.id.get, user6.get.id.get)
 
       val friends = friendshipService.getFriends(user1.get.id.get)
       friends must size(5)
-      friends foreach println
+      //          friends foreach println
 
     }
+
 
   }
 }

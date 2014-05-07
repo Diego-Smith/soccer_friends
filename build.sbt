@@ -18,7 +18,8 @@ libraryDependencies ++= Seq(
   // Downgrade to JQuery 1.8.3 so that integration tests with HtmlUnit work.
   "org.webjars" % "bootstrap" % "3.0.0" exclude("org.webjars", "jquery"),
   "org.webjars" % "jquery" % "1.8.3",
-  "org.scalacheck" %% "scalacheck" % "1.10.1" % "test"
+  "org.scalacheck" %% "scalacheck" % "1.10.1" % "test",
+  "org.mockito" % "mockito-core" % "1.9.5" % "test"
 )
 
 

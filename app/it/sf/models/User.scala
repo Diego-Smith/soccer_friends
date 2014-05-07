@@ -16,7 +16,7 @@ class UserTable(tag: Tag) extends Table[User](tag, "USER") {
   def password = column[String]("PASSWORD", O.NotNull)
 
   // the * projection (e.g. select * ...) auto-transform the tupled column values to / from a User
-  def * = (id.?, username, password) <>(User.tupled, User.unapply)
+  def * = (id.?, username, password) <> (User.tupled, User.unapply)
   def usernameUnique = index("UNIQUE_USERNAME", username, unique = true)
 }
 
