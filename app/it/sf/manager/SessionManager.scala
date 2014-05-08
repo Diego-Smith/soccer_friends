@@ -15,7 +15,7 @@ import scala.collection.mutable
 object SessionManager extends ApplicationLoggerImpl with UserService with PageVisitedService {
   var map = mutable.Map[String, User]()
 
-  @deprecated//TODO: revisit it
+  //TODO: revisit it
   def logWebPage(webPage: String, request: Request[play.api.mvc.AnyContent]) {
     val idUser: Option[Int] = SessionManager.getUserSession(request.session) match {
       case None => Some(Defines.DEFAULT_USER_ID)

@@ -1,10 +1,10 @@
 @(userForm: Form[it.sf.controllers.UserData], actionToPerform: String)
 
 @import helper._
-@import it.sf.controllers.routes.RegistrationController.{postLogin, postRegister}
+@import it.sf.controllers.routes.RegistrationController.{oldPostLogin, postRegister}
 
 @actionCall = @{
-    if("login".equals(actionToPerform)) postLogin else postRegister
+    if("login".equals(actionToPerform)) oldPostLogin else postRegister
 }
 
 @helper.form(actionCall) {

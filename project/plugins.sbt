@@ -8,6 +8,8 @@ resolvers ++= Seq(
   "Sonatype Releases" at "http://oss.sonatype.org/content/repositories/releases"
 )
 
+resolvers += Resolver.sonatypeRepo("releases")
+
 // Use the Play sbt plugin for Play projects
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.2.0")
 //addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.3-M1")

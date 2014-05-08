@@ -4,23 +4,26 @@ import play.api._
 import play.api.mvc._
 import it.sf.service.UserService
 import it.sf.models.User
+import securesocial.core.java.SecureSocial.SecuredAction
+import securesocial.core.{SecuredRequest, SecureSocial}
+import it.sf.util.WithProvider
 
-object Application extends Controller with UserService {
+object Application extends Controller with UserService with SecureSocial {
 
   val logger = Logger
 
-  def index = Action {
+  def index = SecuredAction {
     implicit request =>
-    Ok(views.html.index("Your new application is ready."))
+      Ok(views.html.index("Your new application is ready.", request.user))
   }
 
   //TODO: remove
   def insert = Action {
+    //    FAKE_RESULT
+    val user = User(None, "diego", "test")
     insertUser(user)
     val userList = getUsersList
     Ok(views.html.user.list(userList))
-    //    FAKE_RESULT
-    val user = User(None, "diego", "test")
   }
 
   //TODO: remove

@@ -8,6 +8,12 @@ import play.api.db.slick.DB
 import play.api.db.slick.Session
 import it.sf.logger.ApplicationLoggerImpl
 import scala.slick.lifted
+import securesocial.core._
+import securesocial.core.providers.Token
+import securesocial.core.IdentityId
+import securesocial.core.providers.Token
+import scala.Some
+import it.sf.models.User
 
 trait UserRepository {
   lazy val users: lifted.TableQuery[UserTable] = TableQuery[UserTable]
@@ -94,5 +100,39 @@ trait UserService extends ApplicationLoggerImpl with UserRepository {
   }
 
 }
+
+import play.api.Application
+class UserServicePluginImpl(application: Application) extends UserServicePlugin(application: Application) with UserService {
+  override def deleteExpiredTokens(): Unit = {}
+
+  override def deleteToken(uuid: String): Unit = {}
+
+  override def findToken(token: String): Option[Token] = {
+    println("findToken")
+    None
+  }
+
+  override def save(token: Token): Unit = {}
+
+  override def save(user: Identity): Identity = {
+    SocialUser(user)
+  }
+
+  override def findByEmailAndProvider(email: String, providerId: String): Option[Identity] = None
+
+  override def find(id: IdentityId): Option[Identity] = {
+    val pass: PasswordInfo = PasswordInfo.apply("md5", "diego", None)
+//    val socialUser: SocialUser = SocialUser.apply(id, "Diego", "Fabbro", "diego Fabbro", None, None, AuthenticationMethod.UserPassword, None, None, Some(pass))
+    val socialUser: SocialUser = SocialUser.apply(id, "Diego", "Fabbro", "Diego Fabbro", Some("diego.naali@gmail.com"), None ,AuthenticationMethod.UserPassword, None, None, Some(pass))
+
+    val optionUser: Option[User] = findUserByUsername(id.userId)
+    optionUser match {
+      case Some(user) => Some(socialUser)
+      case None => None
+    }
+
+  }
+}
+
 
 case class UserValidation(result: Boolean, user: Option[User], errorMessage: String)

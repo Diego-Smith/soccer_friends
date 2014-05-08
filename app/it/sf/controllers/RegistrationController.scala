@@ -30,14 +30,14 @@ object RegistrationController extends Controller with UserService {
     Ok(views.html.registration.registration(loginForm, "login"))
   }
 
-  def postLogin = Action {
+  def oldPostLogin = Action {
     implicit request => {
       loginForm.bindFromRequest.fold(
         formWithErrors => BadRequest(views.html.registration.registration(formWithErrors, "login")),
         form => {
           val code: String = request.session.hashCode.toString
           SessionManager.addUserSession(form.username, code)
-          Redirect(routes.Application.index).withSession(Defines.SESSION_USER_KEY -> code)
+          Redirect(routes.Application.index).withSession(Defines.SESSION_USER_KEY -> code).withCookies(Cookie(Defines.SESSION_USER_KEY, code))
         })
     }
   }

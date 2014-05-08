@@ -1,4 +1,4 @@
-@(message: String)(implicit session: play.api.mvc.Session)
+@(message: String, identity: securesocial.core.Identity)
 
 @import it.sf.controllers.routes.RegistrationController
 @import it.sf.manager.SessionManager
@@ -62,10 +62,7 @@
                       </li>
                   </ul>
                   <div class="test">
-                       @{SessionManager.getUserSession(session) match {
-                            case Some(user) => <p> {user.username} </p>
-                            case None =>
-                      }}
+                            <p> @{identity.firstName} </p>
                   </div>
               </div>
           </div>
@@ -153,7 +150,7 @@
   </div><!-- /.container -->
 
 
- <a class="btn" href="@RegistrationController.login">login</a>
+ <!--<a class="btn" href="RegistrationController.login">login</a>-->
 
 
   </body>
