@@ -11,22 +11,18 @@ import it.sf.manager.SessionManager
 object RegistrationController extends Controller with UserService {
   val userForm: Form[UserData] = Form(
     mapping(
-      "name" -> nonEmptyText,
+      "username" -> nonEmptyText,
       "password" -> nonEmptyText)(UserData.apply)(UserData.unapply))
-
-  //  val loginForm: Form[UserData] = Form(
-  //    tuple("name" -> text,
-  //      "password" -> text) verifying("Error", _ match {
-  //      case (name, password) => findUserByUsername(name, password).isDefined
-  //    })
-  //  )
 
   val loginForm: Form[UserData] = Form(
     mapping(
-      "name" -> nonEmptyText,
+      "username" -> nonEmptyText,
       "password" -> nonEmptyText)(UserData.apply)(UserData.unapply)
       verifying("Error username or password", _ match {
-      case userData => findUserByUsername(userData.name, userData.password).isDefined
+      case userData => {
+        val userOption: Option[User] = findUserByUsername(userData.username, userData.password)
+        userOption.isDefined
+      }
     })
   )
 
@@ -39,8 +35,9 @@ object RegistrationController extends Controller with UserService {
       loginForm.bindFromRequest.fold(
         formWithErrors => BadRequest(views.html.registration.registration(formWithErrors, "login")),
         form => {
-          SessionManager.addUserSession(form.name, request.session.hashCode.toString)
-          Ok(s"Logged!").withSession(Defines.SESSION_USER_KEY -> request.session.hashCode.toString)
+          val code: String = request.session.hashCode.toString
+          SessionManager.addUserSession(form.username, code)
+          Redirect(routes.Application.index).withSession(Defines.SESSION_USER_KEY -> code)
         })
     }
   }
@@ -54,7 +51,7 @@ object RegistrationController extends Controller with UserService {
       userForm.bindFromRequest.fold(
         formWithErrors => BadRequest(views.html.registration.registration(formWithErrors, "register")),
         form => {
-          val numInsert = insertUser(User(None, form.name, form.password))
+          val numInsert = insertUser(User(None, form.username, form.password))
           //            Redirect(routes.Application.registration).flashing("success" -> "Utente creato con successo")
           Ok(s"inserted records:  $numInsert")
         })
@@ -62,4 +59,4 @@ object RegistrationController extends Controller with UserService {
   }
 }
 
-case class UserData(name: String, password: String)
+case class UserData(username: String, password: String)

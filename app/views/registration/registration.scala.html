@@ -8,7 +8,7 @@
 }
 
 @helper.form(actionCall) {
-    @helper.inputText(userForm("name"))
+    @helper.inputText(userForm("username"))
     @helper.inputPassword(userForm("password"))
 
     @userForm.globalError.map { error =>

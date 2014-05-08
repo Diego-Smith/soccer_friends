@@ -15,16 +15,7 @@ import scala.collection.mutable
 object SessionManager extends ApplicationLoggerImpl with UserService with PageVisitedService {
   var map = mutable.Map[String, User]()
 
-//  private def addSession(key: String, value: Object) = {
-//    key match {
-//      case null =>
-//        null
-//      case a =>
-//        //        val session = Http.Context.current().session()
-//        map.put(key, value)
-//    }
-//  }
-
+  @deprecated//TODO: revisit it
   def logWebPage(webPage: String, request: Request[play.api.mvc.AnyContent]) {
     val idUser: Option[Int] = SessionManager.getUserSession(request.session) match {
       case None => Some(Defines.DEFAULT_USER_ID)
@@ -38,37 +29,22 @@ object SessionManager extends ApplicationLoggerImpl with UserService with PageVi
     insertPageVisited(PageVisited(None, webPage, request.remoteAddress, null, idUser))
   }
 
-//  def addUserSession(id: Long, user: User) = {
-//    map.put(getUserKey(id), user)
-//  }
 
   def addUserSession(username: String, hash: String) = {
-    val user: Option[User] = findUserByUsername(username)
-    user match {
+    val userOption: Option[User] = findUserByUsername(username)
+    userOption match {
       case Some(user) => map.put(hash, user)
       case None =>
     }
   }
 
-  private def getUserKey(idUser: String): String = {
-    Defines.SESSION_USER_KEY + idUser
-  }
-
-  private def getUserKey(idUser: Long): String = {
-    getUserKey(idUser.toString)
-  }
-
   def getUserSession(session: Session): Option[User] = {
-    val hashcode = session.get(Defines.SESSION_USER_KEY)
-    logConsole(s"hashcode: $hashcode \nmap: ${map.toString} \nsession: $session \n")
-    hashcode match {
+    val hashCodeOption = session.get(Defines.SESSION_USER_KEY)
+    logConsole(s"hashcode: $hashCodeOption \nmap: ${map.toString} \nsession: $session \n")
+    hashCodeOption match {
       case None => None
-      case Some(code) => map.get(code)
+      case Some(hashCode) => map.get(hashCode)
     }
-  }
-
-  private def get(key: String): Option[Object] = {
-    map.get(key)
   }
 }
 

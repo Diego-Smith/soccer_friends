@@ -4,29 +4,29 @@
 
 
 # Home page
-GET     /                           it.sf.controllers.Application.index
+GET     /                                   it.sf.controllers.Application.index
 
 
 #User
-GET		/user/insert				it.sf.controllers.Application.insert
-GET		/user/hello/:username/:password it.sf.controllers.Application.helloUser(username, password)
+GET		/user/insert				        it.sf.controllers.Application.insert
+GET		/user/hello/:username/:password     it.sf.controllers.Application.helloUser(username, password)
 
 #Category
-GET		/category/insert/:name			it.sf.controllers.CategoryController.testAddCategory(name)
-GET		/category/list				it.sf.controllers.CategoryController.listCategories
+GET		/category/insert/:name		        it.sf.controllers.CategoryController.testAddCategory(name)
+GET		/category/list				        it.sf.controllers.CategoryController.listCategories
 
 #Login
-GET 	/login						it.sf.controllers.RegistrationController.login
-POST	/login						it.sf.controllers.RegistrationController.postLogin
+GET 	/login						        it.sf.controllers.RegistrationController.login
+POST	/login						        it.sf.controllers.RegistrationController.postLogin
 #Registration
-GET		/register					it.sf.controllers.RegistrationController.register
-POST	/register						it.sf.controllers.RegistrationController.postRegister
+GET		/register					        it.sf.controllers.RegistrationController.register
+POST	/register					        it.sf.controllers.RegistrationController.postRegister
 
 # Users
-#GET	/users/add					controllers.Users.add
-#POST	/users						controllers.Users.save
+#GET	/users/add					        controllers.Users.add
+#POST	/users						        controllers.Users.save
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
-GET     /webjars/*file                    controllers.WebJarAssets.at(file)
+GET     /assets/*file                       controllers.Assets.at(path="/public", file)
+GET     /webjars/*file                      controllers.WebJarAssets.at(file)

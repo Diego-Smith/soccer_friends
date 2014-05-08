@@ -11,24 +11,27 @@ object Application extends Controller with UserService {
 
   def index = Action {
     implicit request =>
-    val status = Results.Status(200)
-    status(views.html.index("Your new application is ready."))
+    Ok(views.html.index("Your new application is ready."))
   }
 
+  //TODO: remove
   def insert = Action {
-    val user = User(None, "diego", "test")
     insertUser(user)
     val userList = getUsersList
     Ok(views.html.user.list(userList))
     //    FAKE_RESULT
+    val user = User(None, "diego", "test")
   }
 
+  //TODO: remove
   val FAKE_RESULT = Results.Status(200)
 
+  //TODO: remove
   def helloUser(username: String, password: String) = AuthMe(username, password) {
     user: User => Ok(s"hello ${user.username}")
   }
 
+  //TODO: remove??
   def AuthMe(username: String, password: String)(f: User => Result) = Action {
     logger.info(s"Authenticating user(username: $username - password: $password)")
     val user: Option[User] = findUserByUsername(username.trim(), password.trim())
