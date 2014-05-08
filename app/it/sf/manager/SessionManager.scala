@@ -13,7 +13,7 @@ import scala.collection.mutable
  * Created by diego on 11/04/14.
  */
 object SessionManager extends ApplicationLoggerImpl with UserService with PageVisitedService {
-  var map = mutable.Map[String, Object]()
+  var map = mutable.Map[String, User]()
 
 //  private def addSession(key: String, value: Object) = {
 //    key match {
@@ -38,8 +38,16 @@ object SessionManager extends ApplicationLoggerImpl with UserService with PageVi
     insertPageVisited(PageVisited(None, webPage, request.remoteAddress, null, idUser))
   }
 
-  def addUserSession(id: Long, user: User) = {
-    map.put(getUserKey(id), user)
+//  def addUserSession(id: Long, user: User) = {
+//    map.put(getUserKey(id), user)
+//  }
+
+  def addUserSession(username: String, hash: String) = {
+    val user: Option[User] = findUserByUsername(username)
+    user match {
+      case Some(user) => map.put(hash, user)
+      case None =>
+    }
   }
 
   private def getUserKey(idUser: String): String = {
@@ -50,18 +58,12 @@ object SessionManager extends ApplicationLoggerImpl with UserService with PageVi
     getUserKey(idUser.toString)
   }
 
-  def getUserSession(session: Session): Option[Object] = {
-    val idUser = session.get(Defines.SESSION_USER_ID).getOrElse(Defines.DEFAULT_USER_ID.toString)
-    //    mLog("iduser:" + idUser + "\nmap:" + map.toString + "\nsession:" + session + "\n")
-    get(getUserKey(idUser)) match {
-      case None =>
-        if ("0".equals(idUser)) {
-          null
-        } else {
-          map.put(getUserKey(idUser), findUserById(idUser.toInt).getOrElse(null))
-          getUserSession(session)
-        }
-      case default => default
+  def getUserSession(session: Session): Option[User] = {
+    val hashcode = session.get(Defines.SESSION_USER_KEY)
+    logConsole(s"hashcode: $hashcode \nmap: ${map.toString} \nsession: $session \n")
+    hashcode match {
+      case None => None
+      case Some(code) => map.get(code)
     }
   }
 

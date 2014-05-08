@@ -5,6 +5,8 @@ import play.api.data.Forms._
 import play.api.mvc._
 import it.sf.service.UserService
 import it.sf.models.User
+import it.sf.util.Defines
+import it.sf.manager.SessionManager
 
 object RegistrationController extends Controller with UserService {
   val userForm: Form[UserData] = Form(
@@ -37,7 +39,8 @@ object RegistrationController extends Controller with UserService {
       loginForm.bindFromRequest.fold(
         formWithErrors => BadRequest(views.html.registration.registration(formWithErrors, "login")),
         form => {
-          Ok(s"Logged!")
+          SessionManager.addUserSession(form.name, request.session.hashCode.toString)
+          Ok(s"Logged!").withSession(Defines.SESSION_USER_KEY -> request.session.hashCode.toString)
         })
     }
   }

@@ -6,8 +6,8 @@ object Defines {
    * SESSION
    */
 
-  lazy val SESSION_USER_KEY = "sessionUserKey_"
-  lazy val SESSION_USER_ID = "sessionUserID"
+  lazy val SESSION_USER_KEY = "sessionUserKey"
+  lazy val SESSION_USER_USERNAME = "sessionUserUsername"
 
     
   /**

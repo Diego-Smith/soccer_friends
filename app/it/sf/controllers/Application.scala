@@ -10,7 +10,7 @@ object Application extends Controller with UserService {
   val logger = Logger
 
   def index = Action {
-    //    Ok(views.html.index("Your new application is ready."))
+    implicit request =>
     val status = Results.Status(200)
     status(views.html.index("Your new application is ready."))
   }

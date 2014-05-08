@@ -23,7 +23,7 @@ GET		/register					it.sf.controllers.RegistrationController.register
 POST	/register						it.sf.controllers.RegistrationController.postRegister
 
 # Users
-#GET		/users/add					controllers.Users.add
+#GET	/users/add					controllers.Users.add
 #POST	/users						controllers.Users.save
 
 
