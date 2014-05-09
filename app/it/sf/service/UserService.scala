@@ -2,8 +2,7 @@ package it.sf.service
 
 import play.api.db.slick.Config.driver.simple._
 import play.api.Play.current
-import it.sf.models.UserTable
-import it.sf.models.User
+import it.sf.models.{AuthenticationMethodEnum, UserTable, User}
 import play.api.db.slick.DB
 import play.api.db.slick.Session
 import it.sf.logger.ApplicationLoggerImpl
@@ -13,7 +12,8 @@ import securesocial.core.providers.Token
 import securesocial.core.IdentityId
 import securesocial.core.providers.Token
 import scala.Some
-import it.sf.models.User
+import scala.slick.driver.JdbcDriver
+import it.sf.models.ProviderIdEnum.ProviderIdEnum
 
 trait UserRepository {
   lazy val users: lifted.TableQuery[UserTable] = TableQuery[UserTable]
@@ -21,7 +21,8 @@ trait UserRepository {
   def dbInsertUser(user: User): Int = {
     play.api.db.slick.DB.withSession {
       implicit session: Session => {
-        (users returning users.map(_.id)) += user
+        val insertReturningId = users returning users.map(_.id)
+        insertReturningId += user
       }
     }
   }
@@ -66,8 +67,8 @@ trait UserService extends ApplicationLoggerImpl with UserRepository {
     case (false, reason) => UserValidation(result = false, None, reason)
   }
 
-  def insertUser(username: String, password: String): UserValidation = {
-    val user = User(None, username, password)
+  def insertUser(username: String, password: String, name: String, surname: String, authMethod: AuthenticationMethod, provider: ProviderIdEnum): UserValidation = {
+    val user = User(None, username, password, Some(name), Some(surname), AuthenticationMethodEnum.getValueByAuthenticationMethod(authMethod), provider.toString)
     insertUser(user)
   }
 
@@ -82,7 +83,7 @@ trait UserService extends ApplicationLoggerImpl with UserRepository {
       } already exists")
     } else {
       user match {
-        case User(None, username, password) =>
+        case User(None, username, password, _, _ , _, _) =>
           if (username.isEmpty || password.isEmpty) {
             (false, "Wrong values")
           } else {
@@ -121,13 +122,15 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
   override def findByEmailAndProvider(email: String, providerId: String): Option[Identity] = None
 
   override def find(id: IdentityId): Option[Identity] = {
-    val pass: PasswordInfo = PasswordInfo.apply("md5", "diego", None)
-//    val socialUser: SocialUser = SocialUser.apply(id, "Diego", "Fabbro", "diego Fabbro", None, None, AuthenticationMethod.UserPassword, None, None, Some(pass))
-    val socialUser: SocialUser = SocialUser.apply(id, "Diego", "Fabbro", "Diego Fabbro", Some("diego.naali@gmail.com"), None ,AuthenticationMethod.UserPassword, None, None, Some(pass))
-
     val optionUser: Option[User] = findUserByUsername(id.userId)
+
     optionUser match {
-      case Some(user) => Some(socialUser)
+      case Some(user) => {
+        val pass: PasswordInfo = PasswordInfo.apply("md5", "diego", None)
+        val socialUser: SocialUser = SocialUser.apply(id, user.name.getOrElse(""), user.surname.getOrElse(""),
+          user.name.getOrElse("") + user.surname.getOrElse(""), Some(user.username), None, user.getAuthenticationMethod, None, None, Some(pass))
+        Some(socialUser)
+      }
       case None => None
     }
 

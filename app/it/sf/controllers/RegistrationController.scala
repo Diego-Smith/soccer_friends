@@ -51,9 +51,8 @@ object RegistrationController extends Controller with UserService {
       userForm.bindFromRequest.fold(
         formWithErrors => BadRequest(views.html.registration.registration(formWithErrors, "register")),
         form => {
-          val numInsert = insertUser(User(None, form.username, form.password))
-          //            Redirect(routes.Application.registration).flashing("success" -> "Utente creato con successo")
-          Ok(s"inserted records:  $numInsert")
+//          val numInsert = insertUser(User(None, form.username, form.password))
+          Ok(s"inserted records:  numInsert")
         })
     }
   }

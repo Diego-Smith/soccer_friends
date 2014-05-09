@@ -18,15 +18,6 @@ object Application extends Controller with UserService with SecureSocial {
   }
 
   //TODO: remove
-  def insert = Action {
-    //    FAKE_RESULT
-    val user = User(None, "diego", "test")
-    insertUser(user)
-    val userList = getUsersList
-    Ok(views.html.user.list(userList))
-  }
-
-  //TODO: remove
   val FAKE_RESULT = Results.Status(200)
 
   //TODO: remove

@@ -8,7 +8,6 @@ GET     /                                   it.sf.controllers.Application.index
 
 
 #User
-GET		/user/insert				        it.sf.controllers.Application.insert
 GET		/user/hello/:username/:password     it.sf.controllers.Application.helloUser(username, password)
 
 #Category
