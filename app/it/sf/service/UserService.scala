@@ -12,6 +12,7 @@ import securesocial.core.IdentityId
 import securesocial.core.providers.Token
 import scala.Some
 import it.sf.models.ProviderIdEnum.ProviderIdEnum
+import play.api.libs.Crypto
 
 trait UserRepository {
   val users: lifted.TableQuery[UserTable] = TableQuery[UserTable]
@@ -108,19 +109,15 @@ trait UserService extends ApplicationLoggerImpl with UserRepository {
   }
 
   def insertUser(username: String, password: String, name: String, surname: String, authMethod: AuthenticationMethod, provider: String): UserValidation = {
-    val user = User(None, username, password, Some(name), Some(surname), AuthenticationMethodEnum.getValueByAuthenticationMethod(authMethod), provider)
+    val user = User(None, username, Crypto.encryptAES(password), Some(name), Some(surname), AuthenticationMethodEnum.getValueByAuthenticationMethod(authMethod), provider)
     insertUser(user)
   }
 
   def validateUser(user: User) = {
     val checkedUser = findUserByUsername(user.username)
     if (!checkedUser.isEmpty) {
-      logConsole(s"User ${
-        user.username
-      } already exists")
-      (false, s"User ${
-        user.username
-      } already exists")
+      logConsole(s"User ${user.username} already exists")
+      (false, s"User ${user.username} already exists")
     } else {
       user match {
         case User(None, username, password, _, _ , _, _) =>
