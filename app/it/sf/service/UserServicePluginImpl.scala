@@ -6,7 +6,6 @@ package it.sf.service
 
 import play.api.Application
 import securesocial.core._
-import it.sf.models.User
 import securesocial.core.IdentityId
 import securesocial.core.PasswordInfo
 import securesocial.core.providers.Token
@@ -35,21 +34,18 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
 
     val optionUser = {
       user.identityId match {
-        case IdentityId(_, "userpass") => {
+        case IdentityId(_, "userpass") =>
           findUserByUsername(user.identityId.userId)
-        }
-        case _ => {
+        case _ =>
           findUserByUsername(user.identityId.userId + user.identityId.providerId)
-        }
       }
     }
 
     optionUser match {
-      case Some(u) => {
+      case Some(u) =>
         println("already exists")
         user
-      }
-      case None => {
+      case None =>
         val username: String = user.identityId.userId + user.identityId.providerId
 
         val userValidation: UserValidation = insertUser(username, "password", user.firstName, user.lastName, user.authMethod, user.identityId.providerId)
@@ -58,7 +54,7 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
         if (userValidation.result) {
           val userId = userValidation.user.get.id.get
           user.authMethod match {
-            case AuthenticationMethod.OAuth2 => {
+            case AuthenticationMethod.OAuth2 =>
               val oauth2Info: OAuth2Info = user.oAuth2Info.get
 
               val oauth2InfoTable = it.sf.models.OAuth2Info(userId, oauth2Info.accessToken, oauth2Info.tokenType, oauth2Info.expiresIn, oauth2Info.refreshToken)
@@ -66,14 +62,11 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
 
               val pass: PasswordInfo = PasswordInfo.apply("cry", Crypto.sign("password"), None)
               SocialUser(user).copy(passwordInfo = Some(pass))
-            }
             case _ => user
           }
         } else {
           user
         }
-
-      }
     }
 
   }
@@ -86,12 +79,10 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
   override def find(id: IdentityId): Option[Identity] = {
     val optionUser = {
       id match {
-        case IdentityId(_, "userpass") => {
+        case IdentityId(_, "userpass") =>
           findUserByUsername(id.userId)
-        }
-        case _ => {
+        case _ =>
           findUserByUsername(id.userId + id.providerId)
-        }
       }
     }
 
@@ -99,12 +90,11 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
 
 
     optionUser match {
-      case Some(user) => {
+      case Some(user) =>
         val pass: PasswordInfo = PasswordInfo.apply("cry", user.password, None)
         val socialUser: SocialUser = SocialUser.apply(id, user.name.getOrElse(""), user.surname.getOrElse(""),
           user.name.getOrElse("") + user.surname.getOrElse(""), Some(user.username), None, user.getAuthenticationMethod, None, None, Some(pass))
         Some(socialUser)
-      }
       case None => None
     }
 

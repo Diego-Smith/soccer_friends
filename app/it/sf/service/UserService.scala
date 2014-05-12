@@ -8,15 +8,12 @@ import play.api.db.slick.Session
 import it.sf.logger.ApplicationLoggerImpl
 import scala.slick.lifted
 import securesocial.core._
-import securesocial.core.IdentityId
-import securesocial.core.providers.Token
 import scala.Some
-import it.sf.models.ProviderIdEnum.ProviderIdEnum
 import play.api.libs.Crypto
 
 trait UserRepository {
   val users: lifted.TableQuery[UserTable] = TableQuery[UserTable]
-  private val insertReturningId = (users returning users.map(_.id))
+  private val insertReturningId = users returning users.map(_.id)
   def dbInsertUser(user: User): Int = {
     play.api.db.slick.DB.withSession {
       implicit session: Session => {
@@ -101,10 +98,9 @@ trait UserService extends ApplicationLoggerImpl with UserRepository {
   def findUserByUsername(username: String): Option[User] = dbFindUserByUserName(username)
 
   def insertUser(user: User): UserValidation = validateUser(user) match {
-    case (true, reason) => {
+    case (true, reason) =>
       val result = dbInsertUser(user)
       UserValidation(result = true, Some(user.copy(id = Some(result))), reason)
-    }
     case (false, reason) => UserValidation(result = false, None, reason)
   }
 

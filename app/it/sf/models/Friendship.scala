@@ -20,5 +20,5 @@ class FriendshipTable(tag: Tag) extends Table[Friendship](tag, "FRIENDSHIP") wit
   def userA = foreignKey("FK_USER_A", fkUserA, users)(_.id)
   def userB = foreignKey("FK_USER_B", fkUserB, users)(_.id)
 
-  def uniqueFriendshipIndex = index("uniqueFriendshipIndex", (fkUserA,fkUserB), true)
+  def uniqueFriendshipIndex = index("uniqueFriendshipIndex", (fkUserA,fkUserB), unique = true)
 }

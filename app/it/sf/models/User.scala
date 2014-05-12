@@ -5,7 +5,6 @@ import play.api.db.slick.Config.driver.simple._
 import play.api.db.slick.Config.driver.simple.Tag
 import securesocial.core.AuthenticationMethod
 import it.sf.models.AuthenticationMethodEnum.AuthenticationMethodEnum
-import it.sf.models.ProviderIdEnum.ProviderIdEnum
 
 case class User(id: Option[Int] = None, username: String, password: String, name: Option[String], surname: Option[String], authMethod: String, providerId: String) {
   def getAuthenticationMethod : AuthenticationMethod = {

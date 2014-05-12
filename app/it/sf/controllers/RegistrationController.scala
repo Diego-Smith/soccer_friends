@@ -19,10 +19,9 @@ object RegistrationController extends Controller with UserService {
       "username" -> nonEmptyText,
       "password" -> nonEmptyText)(UserData.apply)(UserData.unapply)
       verifying("Error username or password", _ match {
-      case userData => {
+      case userData =>
         val userOption: Option[User] = findUserByUsername(userData.username, userData.password)
         userOption.isDefined
-      }
     })
   )
 
