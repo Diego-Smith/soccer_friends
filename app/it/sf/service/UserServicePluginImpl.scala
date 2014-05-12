@@ -64,7 +64,7 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
               val oauth2InfoTable = it.sf.models.OAuth2Info(userId, oauth2Info.accessToken, oauth2Info.tokenType, oauth2Info.expiresIn, oauth2Info.refreshToken)
               insertOauth2(oauth2InfoTable)
 
-              val pass: PasswordInfo = PasswordInfo.apply("cry", Crypto.encryptAES("password"), None)
+              val pass: PasswordInfo = PasswordInfo.apply("cry", Crypto.sign("password"), None)
               SocialUser(user).copy(passwordInfo = Some(pass))
             }
             case _ => user

@@ -30,8 +30,8 @@ class SocialPasswordHasher(application: Application) extends PasswordHasher {
   override def id: String = "cry"
 
   override def matches(passwordInfo: PasswordInfo, suppliedPassword: String): Boolean = {
-    println(s"passwordInfo $passwordInfo and suppliedPassword $suppliedPassword")
-    Crypto.encryptAES(suppliedPassword).equals(passwordInfo.password)
+    Crypto.sign(suppliedPassword).equals(passwordInfo.password)
+
   }
 
   override def hash(plainPassword: String): PasswordInfo = {
