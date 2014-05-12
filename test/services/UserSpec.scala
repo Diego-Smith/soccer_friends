@@ -3,12 +3,13 @@ package services
 import org.junit.runner.RunWith
 import it.sf.service.{UserRepository, UserValidation, UserService}
 import org.specs2.ScalaCheck
-import it.sf.models.User
+import it.sf.models.{ProviderIdEnum, User}
 import scala.collection.mutable
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Prop._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mutable.Specification
+import securesocial.core.AuthenticationMethod
 
 /**
  * Add your spec here.
@@ -40,7 +41,7 @@ class UserSpec extends Specification with ScalaCheck {
         var counter = 0
         val resultInsertingUsernames: Boolean = usernames.foldLeft(true) {
           (oldValue: Boolean, username: String) =>
-            val userValidation: UserValidation = userService.insertUser(username, "password")
+            val userValidation: UserValidation = userService.insertUser(username, "user1", "User", "1", AuthenticationMethod.UserPassword, ProviderIdEnum.UserPassword)
             if ("".equals(username)) {
               "Wrong values".equals(userValidation.errorMessage) && !userValidation.result && userValidation.user.isEmpty
             } else {
@@ -64,7 +65,7 @@ class UserSpec extends Specification with ScalaCheck {
           if ("".equals(value)) "blank"
           else value
         }).mkString(",")
-        classify(counter == 0, s"no insert and size ${usernames.length} (values:${names})") {
+        classify(counter == 0, s"no insert and size ${usernames.length} (values:$names)") {
           collect(((counter + 9) / 10) * 10) {
 
             resultInsertingUsernames

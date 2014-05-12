@@ -21,9 +21,9 @@ object StartupTableFiller extends ApplicationLoggerImpl with UserService with Ca
   }
 
   def fillUserTable() = {
-    insertUser("user1", "user1", "User", "1", AuthenticationMethod.UserPassword, ProviderIdEnum.UserPassword)
-    insertUser("user2", "user2", "User", "2", AuthenticationMethod.OAuth2, ProviderIdEnum.Facebook)
-    insertUser("diego", "diego", "Diego", "asd", AuthenticationMethod.UserPassword, ProviderIdEnum.UserPassword)
+    insertUser("user1", "user1", "User", "1", AuthenticationMethod.UserPassword, "UserPassword")
+    insertUser("diego", "diego", "Diego", "asd", AuthenticationMethod.UserPassword, "UserPassword")
+    insertUser("diego2", "diego", "Diego", "asd", AuthenticationMethod.OAuth2, "facebook")
   }
 
   def fillCategories() {

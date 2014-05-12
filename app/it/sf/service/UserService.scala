@@ -8,24 +8,64 @@ import play.api.db.slick.Session
 import it.sf.logger.ApplicationLoggerImpl
 import scala.slick.lifted
 import securesocial.core._
-import securesocial.core.providers.Token
 import securesocial.core.IdentityId
 import securesocial.core.providers.Token
 import scala.Some
-import scala.slick.driver.JdbcDriver
 import it.sf.models.ProviderIdEnum.ProviderIdEnum
 
 trait UserRepository {
-  lazy val users: lifted.TableQuery[UserTable] = TableQuery[UserTable]
-
+  val users: lifted.TableQuery[UserTable] = TableQuery[UserTable]
+  private val insertReturningId = (users returning users.map(_.id))
   def dbInsertUser(user: User): Int = {
     play.api.db.slick.DB.withSession {
       implicit session: Session => {
-        val insertReturningId = users returning users.map(_.id)
         insertReturningId += user
       }
     }
   }
+
+  def dbInsertUser2(user: User): Int = {
+    play.api.db.slick.DB.withSession {
+      implicit session: Session => {
+        val insertReturningId2 = users returning users.map(_.id)
+        insertReturningId2 += user
+      }
+    }
+  }
+
+
+  private val invoker = insertReturningId.insertInvoker
+
+
+  def dbInsertUser3(user: User): Int = {
+    play.api.db.slick.DB.withSession {
+      implicit session: Session => {
+        invoker.insert(user)
+      }
+    }
+  }
+
+  private val invoker2 = users.insertInvoker
+  def dbInsertUser4(user: User) = {
+    play.api.db.slick.DB.withSession {
+      implicit session: Session => {
+          invoker2.insert(user)
+          true
+      }
+    }
+  }
+
+
+  def dbInsertUser5(user: User) = {
+    play.api.db.slick.DB.withSession {
+      implicit session: Session => {
+        users += user
+      }
+    }
+  }
+
+
+
 
   def dbFindUserByUserName(username: String): Option[User] = DB.withSession {
     implicit session: Session =>
@@ -67,8 +107,8 @@ trait UserService extends ApplicationLoggerImpl with UserRepository {
     case (false, reason) => UserValidation(result = false, None, reason)
   }
 
-  def insertUser(username: String, password: String, name: String, surname: String, authMethod: AuthenticationMethod, provider: ProviderIdEnum): UserValidation = {
-    val user = User(None, username, password, Some(name), Some(surname), AuthenticationMethodEnum.getValueByAuthenticationMethod(authMethod), provider.toString)
+  def insertUser(username: String, password: String, name: String, surname: String, authMethod: AuthenticationMethod, provider: String): UserValidation = {
+    val user = User(None, username, password, Some(name), Some(surname), AuthenticationMethodEnum.getValueByAuthenticationMethod(authMethod), provider)
     insertUser(user)
   }
 
@@ -101,41 +141,4 @@ trait UserService extends ApplicationLoggerImpl with UserRepository {
   }
 
 }
-
-import play.api.Application
-class UserServicePluginImpl(application: Application) extends UserServicePlugin(application: Application) with UserService {
-  override def deleteExpiredTokens(): Unit = {}
-
-  override def deleteToken(uuid: String): Unit = {}
-
-  override def findToken(token: String): Option[Token] = {
-    println("findToken")
-    None
-  }
-
-  override def save(token: Token): Unit = {}
-
-  override def save(user: Identity): Identity = {
-    SocialUser(user)
-  }
-
-  override def findByEmailAndProvider(email: String, providerId: String): Option[Identity] = None
-
-  override def find(id: IdentityId): Option[Identity] = {
-    val optionUser: Option[User] = findUserByUsername(id.userId)
-
-    optionUser match {
-      case Some(user) => {
-        val pass: PasswordInfo = PasswordInfo.apply("md5", "diego", None)
-        val socialUser: SocialUser = SocialUser.apply(id, user.name.getOrElse(""), user.surname.getOrElse(""),
-          user.name.getOrElse("") + user.surname.getOrElse(""), Some(user.username), None, user.getAuthenticationMethod, None, None, Some(pass))
-        Some(socialUser)
-      }
-      case None => None
-    }
-
-  }
-}
-
-
 case class UserValidation(result: Boolean, user: Option[User], errorMessage: String)

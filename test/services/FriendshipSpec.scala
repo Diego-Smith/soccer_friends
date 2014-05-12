@@ -7,6 +7,8 @@ import org.specs2.ScalaCheck
 import play.api.test.WithApplication
 import org.specs2.runner.JUnitRunner
 import org.specs2.mutable.Specification
+import securesocial.core.AuthenticationMethod
+import it.sf.models.ProviderIdEnum
 
 /**
  * Add your spec here.
@@ -22,12 +24,12 @@ class FriendshipSpec extends Specification with ScalaCheck {
     "get Correct Friends" in new WithApplication() {
       val friendshipService = new FriendshipService {}
       val userService = new UserService {}
-      val user1 = userService.insertUser("u1", "pass").user
-      val user2 = userService.insertUser("u2", "pass2").user
-      val user3 = userService.insertUser("u3", "pass2").user
-      val user4 = userService.insertUser("u4", "pass2").user
-      val user5 = userService.insertUser("u5", "pass2").user
-      val user6 = userService.insertUser("u6", "pass2").user
+      val user1 = userService.insertUser("user1", "user1", "User", "1", AuthenticationMethod.UserPassword, ProviderIdEnum.UserPassword).user
+      val user2 = userService.insertUser("user2", "user1", "User", "1", AuthenticationMethod.UserPassword, ProviderIdEnum.UserPassword).user
+      val user3 = userService.insertUser("user3", "user1", "User", "1", AuthenticationMethod.UserPassword, ProviderIdEnum.UserPassword).user
+      val user4 = userService.insertUser("user4", "user1", "User", "1", AuthenticationMethod.UserPassword, ProviderIdEnum.UserPassword).user
+      val user5 = userService.insertUser("user5", "user1", "User", "1", AuthenticationMethod.UserPassword, ProviderIdEnum.UserPassword).user
+      val user6 = userService.insertUser("user6", "user1", "User", "1", AuthenticationMethod.UserPassword, ProviderIdEnum.UserPassword).user
 
       friendshipService.insertFriendship(user1.get.id.get, user2.get.id.get)
       friendshipService.insertFriendship(user1.get.id.get, user3.get.id.get)
