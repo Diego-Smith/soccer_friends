@@ -12,8 +12,8 @@ case class Friendship(id: Option[Int]= None, idUserA: Int, idUserB: Int)
 class FriendshipTable(tag: Tag) extends Table[Friendship](tag, "FRIENDSHIP") with UserService {
   def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
 
-  def fkUserA = column[Int]("ID_USER_A")
-  def fkUserB = column[Int]("ID_USER_B")
+  def fkUserA = column[Int]("ID_USER_A", O.NotNull)
+  def fkUserB = column[Int]("ID_USER_B", O.NotNull)
 
   def * = (id.?, fkUserA, fkUserB) <>(Friendship.tupled, Friendship.unapply)
 

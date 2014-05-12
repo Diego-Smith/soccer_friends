@@ -23,10 +23,10 @@ class UserTable(tag: Tag) extends Table[User](tag, "USER") {
   // The name can't be null
   def username = column[String]("USERNAME", O.NotNull)
   def password = column[String]("PASSWORD", O.NotNull)
-  def name = column[String]("NAME")
-  def surname = column[String]("SURNAME")
-  def authMethod = column[String]("AUTH_METHOD")
-  def providerId = column[String]("PROVIDER_ID")
+  def name = column[String]("NAME", O.Nullable)
+  def surname = column[String]("SURNAME", O.Nullable)
+  def authMethod = column[String]("AUTH_METHOD", O.NotNull)
+  def providerId = column[String]("PROVIDER_ID", O.NotNull)
 
   // the * projection (e.g. select * ...) auto-transform the tupled column values to / from a User
   def * = (id.?, username, password, name.?, surname.?, authMethod, providerId) <> (User.tupled, User.unapply)

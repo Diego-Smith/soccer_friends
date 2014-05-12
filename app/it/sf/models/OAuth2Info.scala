@@ -13,7 +13,7 @@ case class OAuth2Info(userId: Int, accessToken: String, tokenType: Option[String
 class OAuth2InfoTable(tag: Tag) extends Table[OAuth2Info](tag, "OAUTH2INFO") with UserService {
   def userId = column[Int]("USER_ID", O.PrimaryKey)
 
-  def accessToken = column[String]("ACCESS_TOKEN")
+  def accessToken = column[String]("ACCESS_TOKEN", O.NotNull)
   def tokenType = column[String]("TOKEN_TYPE", O.Nullable)
   def expiresIn = column[Int]("EXIPIRES_IN", O.Nullable)
   def refreshToken = column[String]("REFRESH_TOKEN", O.Nullable)

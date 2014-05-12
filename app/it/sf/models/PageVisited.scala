@@ -10,15 +10,12 @@ case class PageVisited(id: Option[Int] = None, pagename: String, ip: String, dat
                        fkUser: Option[Int] = None)
 
 class PageVisitedTable(tag: Tag) extends Table[PageVisited](tag, "PAGE_VISITED") with UserService {
+
   def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
-
   def pagename = column[String]("PAGE_NAME", O.NotNull)
-
   def ip = column[String]("IP", O.NotNull)
-
   def date = column[Date]("DATE", O.NotNull)
-
-  def fkUser = column[Int]("ID_USER")
+  def fkUser = column[Int]("ID_USER", O.Nullable)
 
   def * = (id.?, pagename, ip, date, fkUser.?) <>(PageVisited.tupled, PageVisited.unapply)
 
