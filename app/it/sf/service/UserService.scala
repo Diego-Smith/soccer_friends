@@ -9,7 +9,6 @@ import it.sf.logger.ApplicationLoggerImpl
 import scala.slick.lifted
 import securesocial.core._
 import scala.Some
-import play.api.libs.Crypto
 
 trait UserRepository {
   val users: lifted.TableQuery[UserTable] = TableQuery[UserTable]

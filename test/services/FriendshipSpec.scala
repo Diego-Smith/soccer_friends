@@ -8,7 +8,6 @@ import play.api.test.WithApplication
 import org.specs2.runner.JUnitRunner
 import org.specs2.mutable.Specification
 import securesocial.core.AuthenticationMethod
-import it.sf.models.ProviderIdEnum
 
 /**
  * Add your spec here.

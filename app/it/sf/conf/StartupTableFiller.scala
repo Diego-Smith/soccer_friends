@@ -24,6 +24,7 @@ object StartupTableFiller extends ApplicationLoggerImpl with UserService with Ca
   def fillUserTable() = {
     insertUser("user1", Crypto.sign("user1"), "User", "1", AuthenticationMethod.UserPassword, "userpass")
     insertUser("diego", Crypto.sign("diego"), "Diego", "Smith", AuthenticationMethod.UserPassword, "userpass")
+    insertUser("diego.naali@gmail.com", Crypto.sign("diego"), "Diego", "Smith", AuthenticationMethod.UserPassword, "userpass")
   }
 
   def fillCategories() {
