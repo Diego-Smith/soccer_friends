@@ -10,6 +10,7 @@ import org.scalacheck.Prop._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mutable.Specification
 import securesocial.core.AuthenticationMethod
+import play.api.libs.Crypto
 
 /**
  * Add your spec here.
@@ -41,7 +42,7 @@ class UserSpec extends Specification with ScalaCheck {
         var counter = 0
         val resultInsertingUsernames: Boolean = usernames.foldLeft(true) {
           (oldValue: Boolean, username: String) =>
-            val userValidation: UserValidation = userService.insertUser(username, "user1", "User", "1", AuthenticationMethod.UserPassword, ProviderIdEnum.UserPassword)
+            val userValidation: UserValidation = userService.insertUser(username, Crypto.sign("user1"), "Diego", "Fabbro", AuthenticationMethod.UserPassword, "userpass")
             if ("".equals(username)) {
               "Wrong values".equals(userValidation.errorMessage) && !userValidation.result && userValidation.user.isEmpty
             } else {

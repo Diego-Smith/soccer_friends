@@ -4,45 +4,42 @@ package it.sf.service
  * Created by diego on 12/05/14.
  */
 
-import _root_.java.sql.Date
 import play.api.Application
 import securesocial.core._
-import securesocial.core.IdentityId
 import securesocial.core.PasswordInfo
 import securesocial.core.providers.Token
 import scala.Some
 import play.api.libs.Crypto
-import it.sf.models.{UserPendentRequest, UserPendentRequestTable}
-import org.joda.time.{DateTime, DateTimeZone}
+import it.sf.models.UserPendentRequest
 
 class UserServicePluginImpl(application: Application) extends UserServicePlugin(application: Application) with UserService with OAuth2Service with UserPendentRequestService {
   override def deleteExpiredTokens(): Unit = {
-    println("deleteExpireTokens")
     deleteOldPendentRequests
   }
 
   override def deleteToken(uuid: String): Unit = {
-    println(s"deleteToken $uuid")
+        println(s"deleteToken $uuid")
     deletePendentRequest(uuid)
   }
 
   override def findToken(token: String): Option[Token] = {
-    println("findToken")
+        println(s"findToken $token")
     val optUPRT: Option[UserPendentRequest] = findPendentRequest(token)
-    val optToken: Option[Token] = optUPRT.map(upr => Token(upr.token, upr.email, upr.creationTime, upr.expirationTime, true))
-    println(optToken)
-    println(s"is expired? ${optToken.get.isExpired}")
+    val optToken: Option[Token] = optUPRT.map(upr => Token(upr.token, upr.email, upr.creationTime, upr.expirationTime, upr.isSignup))
+    //    println(optToken)
+    //    println(s"is expired? ${optToken.get.isExpired}")
     optToken
   }
 
   override def save(token: Token): Unit = {
-    val upr: UserPendentRequest = UserPendentRequest(token.email, token.uuid, token.creationTime, token.expirationTime, token.isExpired)
+    println(s"save $token")
+    val optionUser = findUserByUsername(token.email)
+    val upr: UserPendentRequest = UserPendentRequest(token.email, token.uuid, token.creationTime, token.expirationTime, ! optionUser.isDefined)
     insertPendentRequest(upr)
-    println(s"save token $token")
   }
 
   override def save(user: Identity): Identity = {
-    println(s"save $user")
+        println(s"save $user")
 
     val username = {
       user.identityId match {
@@ -57,7 +54,7 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
 
     optionUser match {
       case Some(u) =>
-        println("already exists")
+        updatePassword(username, user.passwordInfo.get.password)
         user
       case None =>
         val userValidation: UserValidation = insertUser(username, user.passwordInfo.getOrElse(PasswordInfo.apply("cry", Crypto.sign("password"), None)).password,
@@ -85,8 +82,21 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
   }
 
   override def findByEmailAndProvider(email: String, providerId: String): Option[Identity] = {
-    println(s"find $email $providerId")
-    None
+    val optionUser = {
+      providerId match {
+        case "userpass" => findUserByUsername(email)
+        case _ => findUserByUsername(email + providerId)
+      }
+    }
+
+    optionUser match {
+      case Some(user) =>
+        val pass: PasswordInfo = PasswordInfo.apply("cry", user.password, None)
+        val socialUser: SocialUser = SocialUser.apply(IdentityId(email, providerId), user.name.getOrElse(""), user.surname.getOrElse(""),
+          s"${user.name.getOrElse("")} ${user.surname.getOrElse("")}", Some(user.username), None, user.getAuthenticationMethod, None, None, Some(pass))
+        Some(socialUser)
+      case None => None
+    }
   }
 
   override def find(id: IdentityId): Option[Identity] = {
@@ -99,14 +109,11 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
       }
     }
 
-    println(s"findiiing $id")
-
-
     optionUser match {
       case Some(user) =>
         val pass: PasswordInfo = PasswordInfo.apply("cry", user.password, None)
         val socialUser: SocialUser = SocialUser.apply(id, user.name.getOrElse(""), user.surname.getOrElse(""),
-          user.name.getOrElse("") + user.surname.getOrElse(""), Some(user.username), None, user.getAuthenticationMethod, None, None, Some(pass))
+          s"${user.name.getOrElse("")} ${user.surname.getOrElse("")}", Some(user.username), None, user.getAuthenticationMethod, None, None, Some(pass))
         Some(socialUser)
       case None => None
     }

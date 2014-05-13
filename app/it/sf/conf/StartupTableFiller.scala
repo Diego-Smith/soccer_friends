@@ -9,6 +9,7 @@ import play.api.db.DB
 import it.sf.service.{UserService, CategoryService, FriendshipService}
 import it.sf.models.Category
 import securesocial.core.AuthenticationMethod
+import play.api.libs.Crypto
 
 object StartupTableFiller extends ApplicationLoggerImpl with UserService with CategoryService with FriendshipService {
   def obtainDB: DatabaseDef = Database.forDataSource(DB.getDataSource())
@@ -21,14 +22,12 @@ object StartupTableFiller extends ApplicationLoggerImpl with UserService with Ca
   }
 
   def fillUserTable() = {
-    insertUser("user1", "user1", "User", "1", AuthenticationMethod.UserPassword, "UserPassword")
-    insertUser("diego", "diego", "Diego", "asd", AuthenticationMethod.UserPassword, "UserPassword")
-    insertUser("diego2", "diego", "Diego", "asd", AuthenticationMethod.OAuth2, "facebook")
+    insertUser("user1", Crypto.sign("user1"), "User", "1", AuthenticationMethod.UserPassword, "userpass")
+    insertUser("diego", Crypto.sign("diego"), "Diego", "Smith", AuthenticationMethod.UserPassword, "userpass")
   }
 
   def fillCategories() {
 
-//    val categoryService = new CategoryService {}
 
     insertCategory(Category(None, "book"))
     insertCategory(Category(None, "school"))

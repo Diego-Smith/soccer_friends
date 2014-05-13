@@ -109,6 +109,17 @@ trait UserService extends ApplicationLoggerImpl with UserRepository {
     insertUser(user)
   }
 
+  def updatePassword(username: String, password:String) = {
+    DB.withSession {
+      implicit session: Session => 
+        val q = for {
+          user <- users
+          if user.username === username
+        } yield user.password
+        q.update(password)
+    }
+  }
+
   def validateUser(user: User) = {
     val checkedUser = findUserByUsername(user.username)
     if (!checkedUser.isEmpty) {

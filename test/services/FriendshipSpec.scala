@@ -24,12 +24,12 @@ class FriendshipSpec extends Specification with ScalaCheck {
     "get Correct Friends" in new WithApplication() {
       val friendshipService = new FriendshipService {}
       val userService = new UserService {}
-      val user1 = userService.insertUser("user1", "user1", "User", "1", AuthenticationMethod.UserPassword, ProviderIdEnum.UserPassword).user
-      val user2 = userService.insertUser("user2", "user1", "User", "1", AuthenticationMethod.UserPassword, ProviderIdEnum.UserPassword).user
-      val user3 = userService.insertUser("user3", "user1", "User", "1", AuthenticationMethod.UserPassword, ProviderIdEnum.UserPassword).user
-      val user4 = userService.insertUser("user4", "user1", "User", "1", AuthenticationMethod.UserPassword, ProviderIdEnum.UserPassword).user
-      val user5 = userService.insertUser("user5", "user1", "User", "1", AuthenticationMethod.UserPassword, ProviderIdEnum.UserPassword).user
-      val user6 = userService.insertUser("user6", "user1", "User", "1", AuthenticationMethod.UserPassword, ProviderIdEnum.UserPassword).user
+      val user1 = userService.insertUser("user1", "user1", "User", "1", AuthenticationMethod.UserPassword, "userpass").user
+      val user2 = userService.insertUser("user2", "user1", "User", "1", AuthenticationMethod.UserPassword, "userpass").user
+      val user3 = userService.insertUser("user3", "user1", "User", "1", AuthenticationMethod.UserPassword, "userpass").user
+      val user4 = userService.insertUser("user4", "user1", "User", "1", AuthenticationMethod.UserPassword, "userpass").user
+      val user5 = userService.insertUser("user5", "user1", "User", "1", AuthenticationMethod.UserPassword, "userpass").user
+      val user6 = userService.insertUser("user6", "user1", "User", "1", AuthenticationMethod.UserPassword, "userpass").user
 
       friendshipService.insertFriendship(user1.get.id.get, user2.get.id.get)
       friendshipService.insertFriendship(user1.get.id.get, user3.get.id.get)
