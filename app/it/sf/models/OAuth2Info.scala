@@ -10,7 +10,7 @@ import it.sf.service.UserService
  */
 case class OAuth2Info(userId: Int, accessToken: String, tokenType: Option[String], expiresIn: Option[Int], refreshToken: Option[String])
 
-class OAuth2InfoTable(tag: Tag) extends Table[OAuth2Info](tag, "OAUTH2INFO") with UserService {
+class OAuth2InfoTable(tag: Tag) extends Table[OAuth2Info](tag, "USER_OAUTH2INFO") with UserService {
   def userId = column[Int]("USER_ID", O.PrimaryKey)
 
   def accessToken = column[String]("ACCESS_TOKEN", O.NotNull)

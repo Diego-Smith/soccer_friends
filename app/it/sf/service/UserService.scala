@@ -105,7 +105,7 @@ trait UserService extends ApplicationLoggerImpl with UserRepository {
   }
 
   def insertUser(username: String, password: String, name: String, surname: String, authMethod: AuthenticationMethod, provider: String): UserValidation = {
-    val user = User(None, username, Crypto.sign(password), Some(name), Some(surname), AuthenticationMethodEnum.getValueByAuthenticationMethod(authMethod), provider)
+    val user = User(None, username, password, Some(name), Some(surname), AuthenticationMethodEnum.getValueByAuthenticationMethod(authMethod), provider)
     insertUser(user)
   }
 

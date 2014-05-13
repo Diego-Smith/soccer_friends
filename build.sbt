@@ -20,7 +20,10 @@ libraryDependencies ++= Seq(
   "org.webjars" % "jquery" % "1.8.3",
   "org.scalacheck" %% "scalacheck" % "1.10.1" % "test",
   "org.mockito" % "mockito-core" % "1.9.5" % "test",
-  "ws.securesocial" %% "securesocial" % "2.1.3"
+  "ws.securesocial" %% "securesocial" % "2.1.3",
+  "joda-time" % "joda-time" % "2.3",
+  "org.joda" % "joda-convert" % "1.5",
+  "com.github.tototoshi" %% "slick-joda-mapper" % "1.1.0"
 )
 
 
