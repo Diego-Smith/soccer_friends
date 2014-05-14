@@ -4,7 +4,7 @@ package it.sf.service
  * Created by diego on 12/05/14.
  */
 
-import play.api.{Logger, Application}
+import play.api.Application
 import securesocial.core._
 import securesocial.core.PasswordInfo
 import securesocial.core.providers.Token
@@ -20,26 +20,26 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
   }
 
   override def deleteToken(uuid: String): Unit = {
-    Logger.debug(s"deleteToken $uuid")
+    logConsole(s"deleteToken $uuid")
     deletePendentRequest(uuid)
   }
 
   override def findToken(token: String): Option[Token] = {
-    Logger.debug(s"findToken $token")
+    logConsole(s"findToken $token")
     val optUPRT: Option[UserPendentRequest] = findPendentRequest(token)
     val optToken: Option[Token] = optUPRT.map(upr => Token(upr.token, upr.email, upr.creationTime, upr.expirationTime, upr.isSignup))
     optToken
   }
 
   override def save(token: Token): Unit = {
-    Logger.debug(s"save $token")
+    logConsole(s"save $token")
     val optionUser = findUserByUsername(token.email)
     val upr: UserPendentRequest = UserPendentRequest(token.email, token.uuid, token.creationTime, token.expirationTime, !optionUser.isDefined)
     insertPendentRequest(upr)
   }
 
   override def save(user: Identity): Identity = {
-    Logger.debug(s"save $user")
+    logConsole(s"save $user")
 
     val username = {
       user.identityId match {
@@ -57,7 +57,7 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
         user.passwordInfo match {
           case Some(pi) =>
             updatePassword(username, pi.password)
-            Logger.debug(s"updated password for username $username, new password: ${user.passwordInfo}")
+            logConsole(s"updated password for username $username, new password: ${user.passwordInfo}")
           case _ =>
         }
       case None =>
@@ -69,7 +69,7 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
         }
         val userValidation: UserValidation = insertUser(username, password,
             user.firstName, user.lastName, user.authMethod, user.identityId.providerId)
-        Logger.debug(s"${userValidation.result} error ${userValidation.errorMessage}")
+        logConsole(s"${userValidation.result} error ${userValidation.errorMessage}")
 
         if (userValidation.result) {
           val userId = userValidation.user.get.id.get
@@ -86,7 +86,7 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
   }
 
   override def findByEmailAndProvider(email: String, providerId: String): Option[Identity] = {
-    logConsole(s"finding email ${email} providerId ${providerId}")
+    logConsole(s"finding email $email providerId $providerId")
     val optionUser = {
       providerId match {
         case "userpass" => findUserByUsername(email)
@@ -105,7 +105,7 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
   }
 
   override def find(id: IdentityId): Option[Identity] = {
-    Logger.debug(s"finding id ${id}")
+    logConsole(s"finding id $id")
     val optionUser = {
       id match {
         case IdentityId(_, "userpass") =>

@@ -7,7 +7,7 @@ trait ApplicationLogger {
 }
 
 trait ApplicationLoggerImpl extends ApplicationLogger {
-  val LOG_ROW_PREFIX = "soccerFriends :: "
+  val LOG_ROW_PREFIX = "[soccerFriends] :: "
   val LOG_PREFIX = ""
   val LOG_POSTFIX = LOG_PREFIX
 
