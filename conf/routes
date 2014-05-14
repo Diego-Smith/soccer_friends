@@ -9,14 +9,17 @@ GET     /                                   it.sf.controllers.Application.index
 
 #User
 GET		/user/hello/:username/:password     it.sf.controllers.Application.helloUser(username, password)
+GET     /user                               it.sf.controllers.Application.user
 
 #Category
 GET		/category/insert/:name		        it.sf.controllers.CategoryController.testAddCategory(name)
 GET		/category/list				        it.sf.controllers.CategoryController.listCategories
 
+
+
 #Login
 #GET 	/login						        it.sf.controllers.RegistrationController.login
-POST	/oldPostLogin						        it.sf.controllers.RegistrationController.oldPostLogin
+POST	/oldPostLogin						it.sf.controllers.RegistrationController.oldPostLogin
 #Registration
 GET		/register					        it.sf.controllers.RegistrationController.register
 POST	/register					        it.sf.controllers.RegistrationController.postRegister

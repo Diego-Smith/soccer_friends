@@ -1,0 +1,9 @@
+@(user: securesocial.core.Identity)
+
+
+@main(title= "User", identity=Some(user)) {
+
+    <p>@{user.email.getOrElse("no email")}</p>
+    <p>@{user.fullName}</p>
+}
+

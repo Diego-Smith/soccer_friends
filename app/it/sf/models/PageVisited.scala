@@ -6,6 +6,8 @@ import play.api.db.slick.Config.driver.simple._
 import it.sf.service.UserService
 import java.util.Calendar
 
+
+//TODO use Joda Time
 case class PageVisited(id: Option[Int] = None, pagename: String, ip: String, dateVisited: Date = new Date(Calendar.getInstance().getTimeInMillis),
                        fkUser: Option[Int] = None)
 

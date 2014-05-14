@@ -13,7 +13,8 @@ trait ApplicationLoggerImpl extends ApplicationLogger {
 
   override def logConsole(text: String) = {
     Logger.info(
-      text.split("\n").map(s => s.mkString(LOG_ROW_PREFIX, "", "\n")).mkString(LOG_PREFIX, "", LOG_POSTFIX))
+      text.split("\n").map(s => s.mkString(LOG_ROW_PREFIX, "", "\n")).mkString(LOG_PREFIX, "", LOG_POSTFIX)
+    )
   }
 
 }

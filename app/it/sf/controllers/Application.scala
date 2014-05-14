@@ -12,7 +12,7 @@ object Application extends Controller with UserService with SecureSocial {
 
   val logger = Logger
 
-  def index = SecuredAction {
+  def index = UserAwareAction {
     implicit request =>
       Ok(views.html.index("Your new application is ready.", request.user))
   }
@@ -23,6 +23,12 @@ object Application extends Controller with UserService with SecureSocial {
   //TODO: remove
   def helloUser(username: String, password: String) = AuthMe(username, password) {
     user: User => Ok(s"hello ${user.username}")
+  }
+
+  def user() = SecuredAction {
+    implicit request =>
+      Ok(views.html.user.dashboard(request.user))
+//      Ok(s"hello")
   }
 
   //TODO: remove??
