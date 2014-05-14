@@ -14,7 +14,7 @@ object Application extends Controller with UserService with SecureSocial {
 
   def index = UserAwareAction {
     implicit request =>
-      Ok(views.html.index("Your new application is ready.", request.user))
+      Ok(views.html.index(request.user))
   }
 
   //TODO: remove
