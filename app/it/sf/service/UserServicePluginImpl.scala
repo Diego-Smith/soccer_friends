@@ -11,8 +11,10 @@ import securesocial.core.providers.Token
 import scala.Some
 import play.api.libs.Crypto
 import it.sf.models.UserPendentRequest
+import it.sf.logger.ApplicationLoggerImpl
 
-class UserServicePluginImpl(application: Application) extends UserServicePlugin(application: Application) with UserService with OAuth2Service with UserPendentRequestService {
+class UserServicePluginImpl(application: Application) extends UserServicePlugin(application: Application)
+    with UserService with OAuth2Service with UserPendentRequestService with ApplicationLoggerImpl {
   override def deleteExpiredTokens(): Unit = {
     deleteOldPendentRequests
   }
@@ -84,6 +86,7 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
   }
 
   override def findByEmailAndProvider(email: String, providerId: String): Option[Identity] = {
+    logConsole(s"finding email ${email} providerId ${providerId}")
     val optionUser = {
       providerId match {
         case "userpass" => findUserByUsername(email)
@@ -95,13 +98,14 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
       case Some(user) =>
         val pass: PasswordInfo = PasswordInfo.apply("cry", user.password, None)
         val socialUser: SocialUser = SocialUser.apply(IdentityId(email, providerId), user.name.getOrElse(""), user.surname.getOrElse(""),
-          s"${user.name.getOrElse("")} ${user.surname.getOrElse("")}", Some(user.username), None, user.getAuthenticationMethod, None, None, Some(pass))
+        s"${user.name.getOrElse("")} ${user.surname.getOrElse("")}", Some(user.username), None, user.getAuthenticationMethod, None, None, Some(pass))
         Some(socialUser)
       case None => None
     }
   }
 
   override def find(id: IdentityId): Option[Identity] = {
+    Logger.debug(s"finding id ${id}")
     val optionUser = {
       id match {
         case IdentityId(_, "userpass") =>

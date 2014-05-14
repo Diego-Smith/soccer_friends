@@ -7,12 +7,13 @@ trait ApplicationLogger {
 }
 
 trait ApplicationLoggerImpl extends ApplicationLogger {
-  private val LOG_ROW_PREFIX = "soccerFriends :: "
-  private val LOG_PREFIX = "----\n"
-  private val LOG_POSTFIX = LOG_PREFIX
+  val LOG_ROW_PREFIX = "soccerFriends :: "
+  val LOG_PREFIX = ""
+  val LOG_POSTFIX = LOG_PREFIX
 
   override def logConsole(text: String) = {
     Logger.info(
       text.split("\n").map(s => s.mkString(LOG_ROW_PREFIX, "", "\n")).mkString(LOG_PREFIX, "", LOG_POSTFIX))
   }
+
 }
