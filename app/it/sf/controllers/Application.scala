@@ -1,10 +1,10 @@
 package it.sf.controllers
 
-import play.api._
-import play.api.mvc._
+import play.api.mvc.{Action, Result, Controller, Results}
 import it.sf.service.UserService
 import it.sf.models.User
 import securesocial.core.SecureSocial
+import play.api.Logger
 
 object Application extends Controller with UserService with SecureSocial {
 
@@ -26,12 +26,6 @@ object Application extends Controller with UserService with SecureSocial {
   //TODO: remove
   def helloUser(username: String, password: String) = AuthMe(username, password) {
     user: User => Ok(s"hello ${user.username}")
-  }
-
-  def user() = SecuredAction {
-    implicit request =>
-      Ok(views.html.user.dashboard(request.user))
-//      Ok(s"hello")
   }
 
   //TODO: remove??

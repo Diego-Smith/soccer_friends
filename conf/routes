@@ -9,7 +9,7 @@ GET     /                                   it.sf.controllers.Application.index
 
 #User
 GET		/user/hello/:username/:password     it.sf.controllers.Application.helloUser(username, password)
-GET     /user                               it.sf.controllers.Application.user
+GET     /user                               it.sf.controllers.UserDashboard.user
 
 #Category
 GET		/category/insert/:name		        it.sf.controllers.CategoryController.testAddCategory(name)
