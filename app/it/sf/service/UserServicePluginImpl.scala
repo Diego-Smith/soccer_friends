@@ -53,13 +53,25 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
     val optionUser = findUserByUsername(username)
 
     optionUser match {
-      case Some(u) =>
+      case Some(u) => {
+
         user.passwordInfo match {
           case Some(pi) =>
             updatePassword(username, pi.password)
             logConsole(s"updated password for username $username, new password: ${user.passwordInfo}")
+
           case _ =>
         }
+
+        user.authMethod match {
+          case AuthenticationMethod.OAuth2 =>
+            val oauth2Info: OAuth2Info = user.oAuth2Info.get
+
+            val oauth2InfoTable = it.sf.models.OAuth2Info(u.id.get, oauth2Info.accessToken, oauth2Info.tokenType, oauth2Info.expiresIn, oauth2Info.refreshToken)
+            updateOauth2(oauth2InfoTable)
+        }
+      }
+
       case None =>
         val password = {
           user.passwordInfo match {

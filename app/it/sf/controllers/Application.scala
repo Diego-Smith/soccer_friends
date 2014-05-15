@@ -4,17 +4,20 @@ import play.api._
 import play.api.mvc._
 import it.sf.service.UserService
 import it.sf.models.User
-import securesocial.core.java.SecureSocial.SecuredAction
-import securesocial.core.{SecuredRequest, SecureSocial}
-import it.sf.util.WithProvider
+import securesocial.core.SecureSocial
 
 object Application extends Controller with UserService with SecureSocial {
 
   val logger = Logger
 
+  //TODO: try to auth in facebook only if it's connected
   def index = UserAwareAction {
     implicit request =>
-      Ok(views.html.index(request.user))
+      request.user match {
+        case Some(i) => Ok(views.html.index(request.user))
+        case None => Redirect("/authenticate/facebook")
+      }
+
   }
 
   //TODO: remove
