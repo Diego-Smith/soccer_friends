@@ -7,7 +7,7 @@ import play.api.Play.current
 /**
  * Created by diego on 15/05/14.
  */
-trait InterestService extends UserService with UserInterestService {
+trait InterestService extends UserInterestService {
   val interests = TableQuery[InterestTable]
 
   def getUserInterests(user: User): List[Interest] = {

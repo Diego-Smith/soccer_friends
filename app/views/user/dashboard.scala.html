@@ -1,10 +1,15 @@
-@(user: securesocial.core.Identity)
+@(user: securesocial.core.Identity, interests: List[it.sf.models.Interest])
 
 
 @main(title= s"soccerFriends - ${user.fullName}", identity=Some(user), "USER") {
 <div class="row">
     <p>@{user.email.getOrElse("no email")}</p>
     <p>@{user.fullName}</p>
+
+    @interests.map { i =>
+        <p>@i</p>
+    }
+
     </div>
 
 <div class="row">
