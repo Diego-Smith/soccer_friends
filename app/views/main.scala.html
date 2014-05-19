@@ -24,6 +24,7 @@ active @otherClasses.getOrElse("")
     <!-- Bootstrap -->
     <!--<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/asset.css")" />-->
     <link rel="stylesheet" href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'/>
+    <link rel="stylesheet" href='@routes.Assets.at("stylesheets/layout.css")'/>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -93,16 +94,15 @@ active @otherClasses.getOrElse("")
 
 
 <div class="container">
-    @content
-    <!-- FOOTER -->
-    <footer>
-        <p class="pull-right"><a href="#">Back to top</a></p>
-
-        <p>&copy; 2014 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-    </footer>
+        @content
 </div>
 
-
-
+<div id="footer">
+    <div class="container">
+        <!--<p class="text-muted">Place sticky footer content here.</p>-->
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2014 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+    </div>
+</div>
 </body>
 </html>

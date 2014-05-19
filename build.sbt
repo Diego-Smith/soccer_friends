@@ -6,6 +6,8 @@ name := "soccer_friends"
 
 version := "1.0-SNAPSHOT"
 
+
+
 //lazy val root = (project in file(".")).addPlugins(SbtWeb)
 scalacOptions ++= Seq("-feature")
 
@@ -31,8 +33,12 @@ libraryDependencies ++= Seq(
 
 play.Project.playScalaSettings
 
-//play.Keys.lessEntryPoints <<= baseDirectory { base =>
-//   (base / "app" / "assets" / "stylesheets" * "asset.less")
-//}
+scalaVersion := "2.10.4"
+
+autoScalaLibrary := false
+
+play.Keys.lessEntryPoints <<= baseDirectory { base =>
+   (base / "app" / "assets" / "stylesheets" * "layout.less")
+}
 //   (base / "app" / "assets" / "stylesheets" * "mixins.less") +++
 //   (base / "app" / "assets" / "stylesheets" * "carousel.less")

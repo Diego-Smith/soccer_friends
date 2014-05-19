@@ -41,7 +41,7 @@ trait UserPendentRequestService {
   def deleteOldPendentRequests() = {
     DB.withSession {
       implicit session: Session => {
-        val now = new DateTime(DateTimeZone.UTC)
+        val now = DateTime.now
 
         val q1 = for {
           jt <- requests
