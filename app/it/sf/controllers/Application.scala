@@ -21,14 +21,6 @@ object Application extends Controller with UserService with SecureSocial {
   }
 
   //TODO: remove
-  val FAKE_RESULT = Results.Status(200)
-
-  //TODO: remove
-  def helloUser(username: String, password: String) = AuthMe(username, password) {
-    user: User => Ok(s"hello ${user.username}")
-  }
-
-  //TODO: remove??
   def AuthMe(username: String, password: String)(f: User => Result) = Action {
     logger.info(s"Authenticating user(username: $username - password: $password)")
     val user: Option[User] = findUserByUsername(username.trim(), password.trim())

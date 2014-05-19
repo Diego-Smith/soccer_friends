@@ -8,7 +8,6 @@ GET     /                                   it.sf.controllers.Application.index
 
 
 #User
-GET		/user/hello/:username/:password     it.sf.controllers.Application.helloUser(username, password)
 GET     /user                               it.sf.controllers.UserDashboard.user
 
 #Category
