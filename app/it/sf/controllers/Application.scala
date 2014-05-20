@@ -35,7 +35,8 @@ object Application extends Controller with UserService with SecureSocial {
       Routes.javascriptRouter("jsRoutes")(
         routes.javascript.InterestController.getItem,
         routes.javascript.InterestController.newItem,
-        routes.javascript.InterestController.updateItem
+        routes.javascript.InterestController.updateItem,
+        routes.javascript.InterestController.interestList
       )
     )
   }

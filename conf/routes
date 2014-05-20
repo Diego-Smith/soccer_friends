@@ -31,6 +31,7 @@ POST	/register					        it.sf.controllers.RegistrationController.postRegister
 GET     /interest/get/:id                   controllers.InterestController.getItem(id: Long)
 GET    /interest/new/:name                 controllers.InterestController.newItem(name: String)
 POST     /interest/update/:id                controllers.InterestController.updateItem(id: Long)
+GET     /interest/list                      controllers.InterestController.interestList
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                       controllers.Assets.at(path="/public", file)

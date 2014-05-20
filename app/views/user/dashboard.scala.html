@@ -7,15 +7,13 @@
 
     <p>@{user.fullName}</p>
 
-    @interests.map { i =>
-    <p>@i</p>
-    }
+    <div id="user-interests-container"></div>
 
     <div class="col-lg-3">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="add interest" id="inputInterest">
+        <div class="input-group" on="init()">
+            <input type="text" class="form-control" placeholder="add interest" id="input-interest">
             <span class="input-group-btn">
-            <a class="btn btn-default" type="button" href="#" id="btn_1" onclick="clickIt()">
+            <a class="btn btn-default" type="button" href="#" id="btn_1" onclick="clickIt(event)">
                 <span class="glyphicon-plus"></span>
             </a>
              </span>
@@ -27,11 +25,13 @@
 }
 
 <script type="text/javascript">
+
   var successFn = function(data) {
    if(data == "true"){
 	   $('#alert-box').html('');
 	   $("#alert-box").append('<div class="alert alert-success">' + '<a class="close" data-dismiss="alert">×</a>  ' +
 			   'Inserted new element! '+ '</div>');
+	jsRoutes.controllers.InterestController.interestList().ajax(ajaxFill);
    }
    else{
 	   $('#alert-box').html('');
@@ -54,9 +54,27 @@
     error: errorFn
   }
 
-  function clickIt() {
-  	var idToGet = $("#inputInterest").val();
-    console.log(idToGet)
-    jsRoutes.controllers.InterestController.newItem(idToGet).ajax(ajax1)
+
+  var fillList = function(data) {
+        $('#user-interests-container').html('');
+        $('#user-interests-container').append(data);
+    	$('#input-interest').focus()
+  };
+
+  ajaxFill = {
+    success: fillList,
+    error: errorFn
+  }
+
+  $("document").on("pageinit",init());
+  function init() {
+    jsRoutes.controllers.InterestController.interestList().ajax(ajaxFill)
+  };
+
+  function clickIt(e) {
+    e.preventDefault()
+  	var idToGet = $("#input-interest").val();
+    jsRoutes.controllers.InterestController.newItem(idToGet).ajax(ajax1);
     }
-  </script>
+
+</script>

@@ -57,5 +57,5 @@ object AuthenticationMethodEnum extends Enumeration {
 
 object ProviderIdEnum extends Enumeration {
   type ProviderIdEnum = Value
-  val UserPassword, Twitter, facebook = Value
+  val UserPassword, twitter, facebook = Value
 }
