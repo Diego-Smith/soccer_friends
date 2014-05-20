@@ -21,4 +21,18 @@ trait InterestService extends UserInterestService {
       }
     }
   }
+
+  def insertInterestToUser(name: String, userId: Long) = {
+    play.api.db.slick.DB.withSession {
+      implicit session => {
+        val firstOption: Option[InterestTable#TableElementType] = interests.filter(_.name === name).firstOption
+
+        val interest = firstOption.getOrElse {
+          (interests returning interests.map(_.id))+= Interest(None, name, userId, None)
+
+        }
+
+      }
+    }
+  }
 }

@@ -9,7 +9,7 @@ import scala.language.implicitConversions
 trait FriendshipService extends UserService  {
   val friendShips = TableQuery[FriendshipTable]
 
-  def validateFriendshipAndReturnCorrectValue(idUserA: Int, idUserB: Int): (Boolean, String) = (true, "")
+  def validateFriendshipAndReturnCorrectValue(idUserA: Long, idUserB: Long): (Boolean, String) = (true, "")
 
   def insertFriendship(idUserA: Int, idUserB: Int): FriendshipInsertResult = validateFriendshipAndReturnCorrectValue(idUserA, idUserB) match {
     case (true, _) =>
@@ -22,10 +22,10 @@ trait FriendshipService extends UserService  {
     case _ => FriendshipInsertResult(None, result = false)
   }
 
-  implicit def listToUserIdList[Int](input: Seq[scala.Int]) = new UserIdList(input)
+  implicit def listToUserIdList[Int](input: Seq[scala.Long]) = new UserIdList(input)
 
   //TODO: compile query?
-  def getFriends(userId: Int): Seq[User] = play.api.db.slick.DB.withSession {
+  def getFriends(userId: Long): Seq[User] = play.api.db.slick.DB.withSession {
     implicit session: Session =>
     (friendShips.filter(_.fkUserA === userId).map(_.fkUserB) ++ friendShips.filter(_.fkUserB === userId).map(_.fkUserA)).run.getUsers
   }

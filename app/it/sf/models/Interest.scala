@@ -4,14 +4,14 @@ import scala.slick.lifted.ProvenShape.proveShapeOf
 import play.api.db.slick.Config.driver.simple._
 import it.sf.service.{UserService, CategoryService}
 
-case class Interest(id: Option[Int] = None, name: String, createdByUserId: Int, idCategory: Option[Int])
+case class Interest(id: Option[Long] = None, name: String, createdByUserId: Long, idCategory: Option[Long])
 
 class InterestTable(tag: Tag) extends Table[Interest](tag, "INTEREST") with CategoryService with UserService {
 
-  def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
+  def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
   def name = column[String]("NAME", O.NotNull)
-  def createdByUserId = column[Int]("CREATED_BY_USER_ID", O.NotNull)
-  def idCategory = column[Int]("ID_CATEGORY")
+  def createdByUserId = column[Long]("CREATED_BY_USER_ID", O.NotNull)
+  def idCategory = column[Long]("ID_CATEGORY")
 
   def * = (id.?, name, createdByUserId, idCategory.?) <>(Interest.tupled, Interest.unapply)
 

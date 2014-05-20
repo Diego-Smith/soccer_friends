@@ -13,7 +13,7 @@ import play.api.Play.current
 trait UserInterestService {
   val userInterests = TableQuery[UserInterestTable]
 
-  def insertUserInterest(idUser: Int, idInterest: Int) {
+  def insertUserInterest(idUser: Long, idInterest: Long) {
     play.api.db.slick.DB.withSession {
       implicit session => {
         userInterests += UserInterest(None, idUser, idInterest, DateTime.now)

@@ -7,13 +7,13 @@ import it.sf.service.UserService
 /**
  * Created by diego on 02/05/14.
  */
-case class Friendship(id: Option[Int]= None, idUserA: Int, idUserB: Int)
+case class Friendship(id: Option[Long]= None, idUserA: Long, idUserB: Long)
 
 class FriendshipTable(tag: Tag) extends Table[Friendship](tag, "FRIENDSHIP") with UserService {
-  def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
+  def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
 
-  def fkUserA = column[Int]("ID_USER_A", O.NotNull)
-  def fkUserB = column[Int]("ID_USER_B", O.NotNull)
+  def fkUserA = column[Long]("ID_USER_A", O.NotNull)
+  def fkUserB = column[Long]("ID_USER_B", O.NotNull)
 
   def * = (id.?, fkUserA, fkUserB) <>(Friendship.tupled, Friendship.unapply)
 

@@ -7,13 +7,13 @@ import it.sf.models.{InterestTable, UserTable}
 import org.joda.time.DateTime
 import com.github.tototoshi.slick.H2JodaSupport._
 
-case class UserInterest(id: Option[Int] = None, idUser: Int, idInterest: Int, creationTime: DateTime)
+case class UserInterest(id: Option[Long] = None, idUser: Long, idInterest: Long, creationTime: DateTime)
 
 class UserInterestTable(tag: Tag) extends Table[UserInterest](tag, "USER_INTEREST") {
 
-  def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
-  def idUser = column[Int]("ID_USER", O.NotNull)
-  def idInterest = column[Int]("ID_INTEREST", O.NotNull)
+  def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
+  def idUser = column[Long]("ID_USER", O.NotNull)
+  def idInterest = column[Long]("ID_INTEREST", O.NotNull)
   def creationTime = column[DateTime]("CREATION_TIME", O.NotNull)
 
   def * = (id.?, idUser, idInterest, creationTime) <> (UserInterest.tupled, UserInterest.unapply)

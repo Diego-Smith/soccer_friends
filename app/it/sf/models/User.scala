@@ -7,7 +7,7 @@ import securesocial.core.AuthenticationMethod
 import it.sf.models.AuthenticationMethodEnum.AuthenticationMethodEnum
 
 //TODO use Long
-case class User(id: Option[Int] = None, username: String, password: String, name: Option[String], surname: Option[String], authMethod: String, providerId: String) {
+case class User(id: Option[Long] = None, username: String, password: String, name: Option[String], surname: Option[String], authMethod: String, providerId: String) {
   def getAuthenticationMethod : AuthenticationMethod = {
     AuthenticationMethodEnum.withName(authMethod).asInstanceOf[AuthenticationMethodEnum].authenticationMethod
   }
@@ -19,7 +19,7 @@ case class User(id: Option[Int] = None, username: String, password: String, name
 
 class UserTable(tag: Tag) extends Table[User](tag, "USER") {
   // Auto Increment the id primary key column
-  def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
+  def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
 
   // The name can't be null
   def username = column[String]("USERNAME", O.NotNull)

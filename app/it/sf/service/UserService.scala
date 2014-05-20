@@ -13,7 +13,7 @@ import scala.Some
 trait UserRepository {
   val users: lifted.TableQuery[UserTable] = TableQuery[UserTable]
   private val insertReturningId = users returning users.map(_.id)
-  def dbInsertUser(user: User): Int = {
+  def dbInsertUser(user: User): Long = {
     play.api.db.slick.DB.withSession {
       implicit session: Session => {
         insertReturningId += user
@@ -21,7 +21,7 @@ trait UserRepository {
     }
   }
 
-  def dbInsertUser2(user: User): Int = {
+  def dbInsertUser2(user: User): Long = {
     play.api.db.slick.DB.withSession {
       implicit session: Session => {
         val insertReturningId2 = users returning users.map(_.id)
@@ -34,7 +34,7 @@ trait UserRepository {
   private val invoker = insertReturningId.insertInvoker
 
 
-  def dbInsertUser3(user: User): Int = {
+  def dbInsertUser3(user: User): Long = {
     play.api.db.slick.DB.withSession {
       implicit session: Session => {
         invoker.insert(user)
@@ -78,18 +78,18 @@ trait UserService extends ApplicationLoggerImpl with UserRepository {
       users.filter(user => user.username === username && user.password === password).firstOption
   }
 
-  def findUserById(id: Int): Option[User] = DB.withSession {
+  def findUserById(id: Long): Option[User] = DB.withSession {
     implicit session: Session =>
       users.filter(_.id === id).firstOption
   }
 
-  class UserIdList[Int](val source: Seq[scala.Int]) {
+  class UserIdList[Long](val source: Seq[scala.Long]) {
     def getUsers: Seq[User] = {
       findUsers(source)
     }
   }
 
-  def findUsers(ids: Seq[Int]): Seq[User] = DB.withSession {
+  def findUsers(ids: Seq[Long]): Seq[User] = DB.withSession {
     implicit session: Session =>
       users.filter(_.id inSetBind ids).list
   }
