@@ -19,6 +19,6 @@ trait UserInterestService {
         userInterests += UserInterest(None, idUser, idInterest, DateTime.now)
       }
     }
-
   }
+
 }

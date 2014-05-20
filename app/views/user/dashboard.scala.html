@@ -13,9 +13,9 @@
 
     <div class="col-lg-3">
         <div class="input-group">
-            <input type="text" class="form-control" placeholder="add interest" id="inputInterest" onkeyup="clickIt()">
+            <input type="text" class="form-control" placeholder="add interest" id="inputInterest">
             <span class="input-group-btn">
-            <a class="btn btn-default" type="button" href="#" id="btn_1" onBlur="clickIt()">
+            <a class="btn btn-default" type="button" href="#" id="btn_1" onclick="clickIt()">
                 <span class="glyphicon-plus"></span>
             </a>
              </span>
@@ -30,13 +30,13 @@
   var successFn = function(data) {
    if(data == "true"){
 	   $('#alert-box').html('');
-	   $("#alert-box").append('<div class="alert alert-error">' + '<a class="close" data-dismiss="alert">×</a>  ' +
-			   'Inserting long value ok! '+ '</div>');
+	   $("#alert-box").append('<div class="alert alert-success">' + '<a class="close" data-dismiss="alert">×</a>  ' +
+			   'Inserted new element! '+ '</div>');
    }
    else{
 	   $('#alert-box').html('');
-	   $("#alert-box").append('<div class="alert alert-success">' + '<a class="close" data-dismiss="alert">×</a>  ' +
-			   '<strong>Success!</strong>Valid Email Id ! '+ '</div>');
+	   $("#alert-box").append('<div class="alert alert-error">' + '<a class="close" data-dismiss="alert">×</a>  ' +
+			   '<strong>Element already exists..!</strong>! '+ '</div>');
 	   }
    console.debug("Success of Ajax Call");
    console.debug(data);
@@ -57,6 +57,6 @@
   function clickIt() {
   	var idToGet = $("#inputInterest").val();
     console.log(idToGet)
-    jsRoutes.controllers.InterestController.getItem(idToGet).ajax(ajax1)
+    jsRoutes.controllers.InterestController.newItem(idToGet).ajax(ajax1)
     }
   </script>

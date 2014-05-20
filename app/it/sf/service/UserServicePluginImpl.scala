@@ -12,6 +12,7 @@ import scala.Some
 import play.api.libs.Crypto
 import it.sf.models.UserPendentRequest
 import it.sf.logger.ApplicationLoggerImpl
+import it.sf.util.UserIdentity
 
 class UserServicePluginImpl(application: Application) extends UserServicePlugin(application: Application)
     with UserService with OAuth2Service with UserPendentRequestService with ApplicationLoggerImpl {
@@ -109,9 +110,9 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
     optionUser match {
       case Some(user) =>
         val pass: PasswordInfo = PasswordInfo.apply("cry", user.password, None)
-        val socialUser: SocialUser = SocialUser.apply(IdentityId(email, providerId), user.name.getOrElse(""), user.surname.getOrElse(""),
+        val ui: UserIdentity = UserIdentity(IdentityId(email, providerId), user.id.get, user.name.getOrElse(""), user.surname.getOrElse(""),
         s"${user.name.getOrElse("")} ${user.surname.getOrElse("")}", Some(user.username), None, user.getAuthenticationMethod, None, None, Some(pass))
-        Some(socialUser)
+        Some(ui)
       case None => None
     }
   }
@@ -130,9 +131,9 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
     optionUser match {
       case Some(user) =>
         val pass: PasswordInfo = PasswordInfo.apply("cry", user.password, None)
-        val socialUser: SocialUser = SocialUser.apply(id, user.name.getOrElse(""), user.surname.getOrElse(""),
+        val ui: UserIdentity = UserIdentity(id, user.id.get, user.name.getOrElse(""), user.surname.getOrElse(""),
           s"${user.name.getOrElse("")} ${user.surname.getOrElse("")}", Some(user.username), None, user.getAuthenticationMethod, None, None, Some(pass))
-        Some(socialUser)
+        Some(ui)
       case None => None
     }
 
