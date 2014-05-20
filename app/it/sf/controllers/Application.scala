@@ -1,10 +1,10 @@
-package it.sf.controllers
+package controllers
 
 import play.api.mvc.{Action, Result, Controller, Results}
 import it.sf.service.UserService
 import it.sf.models.User
 import securesocial.core.SecureSocial
-import play.api.Logger
+import play.api.{Routes, Logger}
 
 object Application extends Controller with UserService with SecureSocial {
 
@@ -28,5 +28,15 @@ object Application extends Controller with UserService with SecureSocial {
       case Some(someUser) => f(someUser)
       case None => Forbidden("I don't know you")
     }
+  }
+
+  def javascriptRoutes = Action { implicit request =>
+    Ok(
+      Routes.javascriptRouter("jsRoutes")(
+        routes.javascript.InterestController.getItem,
+        routes.javascript.InterestController.newItem,
+        routes.javascript.InterestController.updateItem
+      )
+    )
   }
 }

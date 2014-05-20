@@ -6,6 +6,7 @@ import play.api.db.slick.Config.driver.simple.Tag
 import securesocial.core.AuthenticationMethod
 import it.sf.models.AuthenticationMethodEnum.AuthenticationMethodEnum
 
+//TODO use Long
 case class User(id: Option[Int] = None, username: String, password: String, name: Option[String], surname: Option[String], authMethod: String, providerId: String) {
   def getAuthenticationMethod : AuthenticationMethod = {
     AuthenticationMethodEnum.withName(authMethod).asInstanceOf[AuthenticationMethodEnum].authenticationMethod

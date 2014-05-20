@@ -36,7 +36,7 @@ object RegistrationController extends Controller with UserService {
         form => {
           val code: String = request.session.hashCode.toString
           SessionManager.addUserSession(form.username, code)
-          Redirect(routes.Application.index).withSession(Defines.SESSION_USER_KEY -> code).withCookies(Cookie(Defines.SESSION_USER_KEY, code))
+          Redirect(controllers.routes.Application.index).withSession(Defines.SESSION_USER_KEY -> code).withCookies(Cookie(Defines.SESSION_USER_KEY, code))
         })
     }
   }

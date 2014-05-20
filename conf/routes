@@ -4,7 +4,7 @@
 
 
 # Home page
-GET     /                                   it.sf.controllers.Application.index
+GET     /                                  controllers.Application.index
 
 
 #User
@@ -27,6 +27,10 @@ POST	/register					        it.sf.controllers.RegistrationController.postRegister
 #GET	/users/add					        controllers.Users.add
 #POST	/users						        controllers.Users.save
 
+# Interests
+GET     /interest/get/:id                   controllers.InterestController.getItem(id: Long)
+GET    /interest/new_interest                  controllers.InterestController.newItem()
+POST     /interest/update/:id                controllers.InterestController.updateItem(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                       controllers.Assets.at(path="/public", file)
@@ -53,3 +57,6 @@ POST    /password                   securesocial.controllers.PasswordChange.hand
 GET     /authenticate/:provider     securesocial.controllers.ProviderController.authenticate(provider)
 POST    /authenticate/:provider     securesocial.controllers.ProviderController.authenticateByPost(provider)
 GET     /not-authorized             securesocial.controllers.ProviderController.notAuthorized
+
+#AJAX
+GET     /javascriptRoutes     controllers.Application.javascriptRoutes
