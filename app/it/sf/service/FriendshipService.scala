@@ -5,13 +5,14 @@ import play.api.Play.current
 import it.sf.models.{User, FriendshipTable, Friendship}
 import play.api.db.slick.Session
 import scala.language.implicitConversions
+import it.sf.manager.ComponentRegistry
 
-trait FriendshipService extends UserService  {
+trait FriendshipService extends ComponentRegistry {
   val friendShips = TableQuery[FriendshipTable]
 
   def validateFriendshipAndReturnCorrectValue(idUserA: Long, idUserB: Long): (Boolean, String) = (true, "")
 
-  def insertFriendship(idUserA: Int, idUserB: Int): FriendshipInsertResult = validateFriendshipAndReturnCorrectValue(idUserA, idUserB) match {
+  def insertFriendship(idUserA: Long, idUserB: Long): FriendshipInsertResult = validateFriendshipAndReturnCorrectValue(idUserA, idUserB) match {
     case (true, _) =>
       play.api.db.slick.DB.withSession {
         implicit session: Session =>
@@ -22,7 +23,7 @@ trait FriendshipService extends UserService  {
     case _ => FriendshipInsertResult(None, result = false)
   }
 
-  implicit def listToUserIdList[Int](input: Seq[scala.Long]) = new UserIdList(input)
+  implicit def listToUserIdList[Int](input: Seq[scala.Long]) = new userService.UserIdList(input)
 
   //TODO: compile query?
   def getFriends(userId: Long): Seq[User] = play.api.db.slick.DB.withSession {

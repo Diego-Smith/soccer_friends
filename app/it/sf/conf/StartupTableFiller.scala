@@ -13,8 +13,10 @@ import scala.Some
 import it.sf.models.OAuth2Info
 import it.sf.models.Category
 import it.sf.models.UserInterest.Configuration
+import it.sf.service.impl.CategoryService
+import it.sf.manager.ComponentRegistry
 
-object StartupTableFiller extends ApplicationLoggerImpl with UserService with CategoryService with FriendshipService with OAuth2Service with InterestService
+object StartupTableFiller extends ApplicationLoggerImpl with ComponentRegistry with CategoryService with FriendshipService with OAuth2Service with InterestService
 with UserInterestService with ConfigurationService {
   def obtainDB: DatabaseDef = Database.forDataSource(DB.getDataSource())
 
@@ -25,21 +27,20 @@ with UserInterestService with ConfigurationService {
 
     dbAlreadyFilledOption match {
       case Some(dbAlreadyFilled) => logConsole("RELOAD - DETECTED TABLES ALREADY FILLED")
-      case _ => {
+      case _ =>
         fillCategories
         fillUserTable
         fillFriendship
         insertConfiguration("DB_SETUP", "CREATE THIS TO PREVENT OTHER INSERTS ON RELOAD")
-      }
     }
 
   }
 
   def fillUserTable() = {
-    insertUser("user1", Crypto.sign("user1"), "User", "1", AuthenticationMethod.UserPassword, "userpass")
-    insertUser("diego", Crypto.sign("diego"), "Diego", "Smith", AuthenticationMethod.UserPassword, "userpass")
-    insertUser("diego.naali@gmail.com", Crypto.sign("diego"), "Diego", "Smith", AuthenticationMethod.UserPassword, "userpass")
-    insertUser("10203749685571466facebook", Crypto.sign("password"), "Diego", "Fabbro", AuthenticationMethod.OAuth2, "facebook")
+    userService.insertUser("user1", Crypto.sign("user1"), "User", "1", AuthenticationMethod.UserPassword, "userpass")
+    userService.insertUser("diego", Crypto.sign("diego"), "Diego", "Smith", AuthenticationMethod.UserPassword, "userpass")
+    userService.insertUser("diego.naali@gmail.com", Crypto.sign("diego"), "Diego", "Smith", AuthenticationMethod.UserPassword, "userpass")
+    userService.insertUser("10203749685571466facebook", Crypto.sign("password"), "Diego", "Fabbro", AuthenticationMethod.OAuth2, "facebook")
     insertOrUpdateOauth2(OAuth2Info(4, "thisTokenWillBeChange", None, Some(5108366), None))
 
 

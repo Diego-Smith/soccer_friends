@@ -1,11 +1,10 @@
 package it.sf.manager
 
 import play.api.mvc.RequestHeader
-import it.sf.service.UserService
 import it.sf.models.User
 
-object AuthUtils extends UserService {
-  def parseUserFromCookie(implicit request: RequestHeader) = request.session.get("username").flatMap(username => findUserByUsername(username))
+object AuthUtils extends ComponentRegistry {
+  def parseUserFromCookie(implicit request: RequestHeader) = request.session.get("username").flatMap(username => userService.findUserByUsername(username))
 
   def parseUserFromQueryString(implicit request: RequestHeader) = {
     val query = request.queryString.map {
@@ -15,7 +14,7 @@ object AuthUtils extends UserService {
     val password = query get "password"
 
     (username, password) match {
-      case (Some(u), Some(p)) => findUserByUsername(u, p)
+      case (Some(u), Some(p)) => userService.findUserByUsername(u, p)
       case _ => None
     }
   }

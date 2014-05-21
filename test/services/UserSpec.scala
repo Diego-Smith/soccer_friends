@@ -1,7 +1,7 @@
 package services
 
 import org.junit.runner.RunWith
-import it.sf.service.{UserRepository, UserValidation, UserService}
+import it.sf.service._
 import org.specs2.ScalaCheck
 import it.sf.models.{ProviderIdEnum, User}
 import scala.collection.mutable
@@ -11,6 +11,11 @@ import org.specs2.runner.JUnitRunner
 import org.specs2.mutable.Specification
 import securesocial.core.AuthenticationMethod
 import play.api.libs.Crypto
+import it.sf.service.UserValidation
+import scala.Some
+import it.sf.models.User
+import org.specs2.mock.Mockito
+import it.sf.repository.UserRepositoryComponent
 
 /**
  * Add your spec here.
@@ -38,7 +43,7 @@ class UserSpec extends Specification with ScalaCheck {
 
     "test scala check" in prop {
       (usernames: List[String]) => {
-        val userService = new UserService with MockUserRepository {}
+        val userService = MockUserRepository.userService
         var counter = 0
         val resultInsertingUsernames: Boolean = usernames.foldLeft(true) {
           (oldValue: Boolean, username: String) =>
@@ -77,10 +82,10 @@ class UserSpec extends Specification with ScalaCheck {
   }
 }
 
-trait MockUserRepository extends UserRepository {
+class MockUserRepository extends it.sf.repository.UserRepository {
   var mutableList = mutable.LinkedList[User]()
 
-  override def dbInsertUser(user: User): Int = {
+  override def dbInsertUser(user: User): Long = {
     mutableList = mutableList.+:(user)
     //    println(mutableList.size)
     mutableList.size
@@ -95,4 +100,9 @@ trait MockUserRepository extends UserRepository {
       None
     }
   }
+}
+
+object MockUserRepository extends UserServiceComponent with UserRepositoryComponent with Mockito {
+  val userService = new UserService
+  val userRepository = new MockUserRepository
 }

@@ -3,12 +3,11 @@ package it.sf.controllers
 import play.api.data._
 import play.api.data.Forms._
 import play.api.mvc._
-import it.sf.service.UserService
 import it.sf.models.User
 import it.sf.util.Defines
-import it.sf.manager.SessionManager
+import it.sf.manager.{ComponentRegistry, SessionManager}
 
-object RegistrationController extends Controller with UserService {
+object RegistrationController extends Controller with ComponentRegistry {
   val userForm: Form[UserData] = Form(
     mapping(
       "username" -> nonEmptyText,
@@ -20,7 +19,7 @@ object RegistrationController extends Controller with UserService {
       "password" -> nonEmptyText)(UserData.apply)(UserData.unapply)
       verifying("Error username or password", _ match {
       case userData =>
-        val userOption: Option[User] = findUserByUsername(userData.username, userData.password)
+        val userOption: Option[User] = userService.findUserByUsername(userData.username, userData.password)
         userOption.isDefined
     })
   )

@@ -2,14 +2,14 @@ package it.sf.controllers
 
 import play.mvc.Controller
 import securesocial.core.SecureSocial
-import it.sf.service.{InterestService, UserService}
+import it.sf.service.{InterestService}
 import it.sf.util.UserIdentity
 
 
 /**
  * Created by diego on 15/05/14.
  */
-object UserDashboard extends Controller with SecureSocial with UserService with InterestService {
+object UserDashboard extends Controller with SecureSocial with InterestService {
   def user() = SecuredAction {
     implicit request =>
 

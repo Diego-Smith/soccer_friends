@@ -6,13 +6,13 @@ import it.sf.models.{PageVisited, User}
 import play.api.mvc.Request
 import play.api.mvc.Session
 import it.sf.util.Defines
-import it.sf.service.{PageVisitedService, UserService}
+import it.sf.service.{PageVisitedService}
 import scala.collection.mutable
 
 /**
  * Created by diego on 11/04/14.
  */
-object SessionManager extends ApplicationLoggerImpl with UserService with PageVisitedService {
+object SessionManager extends ApplicationLoggerImpl with ComponentRegistry with PageVisitedService {
   var map = mutable.Map[String, User]()
 
   //TODO: revisit it
@@ -31,7 +31,7 @@ object SessionManager extends ApplicationLoggerImpl with UserService with PageVi
 
 
   def addUserSession(username: String, hash: String) = {
-    val userOption: Option[User] = findUserByUsername(username)
+    val userOption: Option[User] = userService.findUserByUsername(username)
     userOption match {
       case Some(user) => map.put(hash, user)
       case None =>

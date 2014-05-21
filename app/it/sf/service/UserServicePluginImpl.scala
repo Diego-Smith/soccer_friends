@@ -13,9 +13,10 @@ import play.api.libs.Crypto
 import it.sf.models.UserPendentRequest
 import it.sf.logger.ApplicationLoggerImpl
 import it.sf.util.UserIdentity
+import it.sf.manager.ComponentRegistry
 
 class UserServicePluginImpl(application: Application) extends UserServicePlugin(application: Application)
-    with UserService with OAuth2Service with UserPendentRequestService with ApplicationLoggerImpl {
+    with ComponentRegistry with OAuth2Service with UserPendentRequestService with ApplicationLoggerImpl {
   override def deleteExpiredTokens(): Unit = {
     deleteOldPendentRequests
   }
@@ -34,7 +35,7 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
 
   override def save(token: Token): Unit = {
     logConsole(s"save $token")
-    val optionUser = findUserByUsername(token.email)
+    val optionUser = userService.findUserByUsername(token.email)
     val upr: UserPendentRequest = UserPendentRequest(token.email, token.uuid, token.creationTime, token.expirationTime, !optionUser.isDefined)
     insertPendentRequest(upr)
   }
@@ -51,14 +52,14 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
       }
     }
 
-    val optionUser = findUserByUsername(username)
+    val optionUser = userService.findUserByUsername(username)
 
     optionUser match {
       case Some(u) => {
 
         user.passwordInfo match {
           case Some(pi) =>
-            updatePassword(username, pi.password)
+            userService.updatePassword(username, pi.password)
             logConsole(s"updated password for username $username, new password: ${user.passwordInfo}")
 
           case _ =>
@@ -80,7 +81,7 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
             case None => Crypto.sign("")
           }
         }
-        val userValidation: UserValidation = insertUser(username, password,
+        val userValidation: UserValidation = userService.insertUser(username, password,
             user.firstName, user.lastName, user.authMethod, user.identityId.providerId)
         logConsole(s"${userValidation.result} error ${userValidation.errorMessage}")
 
@@ -102,8 +103,8 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
     logConsole(s"finding email $email providerId $providerId")
     val optionUser = {
       providerId match {
-        case "userpass" => findUserByUsername(email)
-        case _ => findUserByUsername(email + providerId)
+        case "userpass" => userService.findUserByUsername(email)
+        case _ => userService.findUserByUsername(email + providerId)
       }
     }
 
@@ -122,9 +123,9 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
     val optionUser = {
       id match {
         case IdentityId(_, "userpass") =>
-          findUserByUsername(id.userId)
+          userService.findUserByUsername(id.userId)
         case _ =>
-          findUserByUsername(id.userId + id.providerId)
+          userService.findUserByUsername(id.userId + id.providerId)
       }
     }
 

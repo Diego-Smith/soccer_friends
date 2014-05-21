@@ -11,6 +11,9 @@ import it.sf.models.{User, OAuth2InfoTable}
 import play.api.db.slick.Session
 import scala.slick.lifted
 import scala.slick.driver.H2Driver.simple._
+import it.sf.manager.ComponentRegistry
+import scala.None
+
 /**
  * Add your spec here.
  * You can mock out a whole application including requests, plugins etc.
@@ -24,13 +27,18 @@ class DbTests extends Specification with ScalaCheck {
 
     "test queries" in new WithApplication() {
 
+      private val componentRegistry: ComponentRegistry = new ComponentRegistry {}
+      private val userService = componentRegistry.userService
       private val interestService: InterestService with Object = new InterestService {}
-
       play.api.db.slick.DB.withSession {
         implicit session: Session => {
-          val user4: Option[User] = interestService.findUserById(4)
+          val user4: Option[User] = userService.findUserById(4)
           println("interets:" + interestService.interests.list)
-          val interests = interestService.getUserInterests(user4.get)
+
+          user4 must beSome
+          user4.get.id must beSome
+          val interests = interestService.getUserInterests(user4.get.id.get)
+
           println("--------" + interests)
         }
       }

@@ -5,8 +5,8 @@ import org.specs2.runner.JUnitRunner
 import org.specs2.mutable.Specification
 import org.specs2.ScalaCheck
 import play.api.test.WithApplication
-import it.sf.service.UserRepository
 import it.sf.models.User
+import it.sf.manager.ComponentRegistry
 
 /**
  * Created by diego on 09/05/14.
@@ -20,11 +20,11 @@ class PerformanceSlickTest extends Specification with ScalaCheck {
 
     "Performance with val" in new WithApplication() {
 
-      private val userRepository: UserRepository with Object = new UserRepository {}
+      private val componentRegistry: ComponentRegistry = new ComponentRegistry {}
       //case class User(id: Option[Int] = None, username: String, password: String, name: Option[String], surname: Option[String], authMethod: String, providerId: String) {
       (1 to 40000).foreach(intVal => {
         val user: User = User(None, s"user1$intVal", "user1", Some("diego"), Some("diego"), "test", "userpass")
-        userRepository.dbInsertUser4(user)
+        componentRegistry.userRepository.dbInsertUser4(user)
       })
     }
 

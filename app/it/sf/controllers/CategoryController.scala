@@ -1,9 +1,9 @@
 package it.sf.controllers
 
-import it.sf.service.CategoryService
 import play.api.mvc._
 import it.sf.models.Category
 import scala.util.Random
+import it.sf.service.impl.CategoryService
 
 object CategoryController extends Controller with CategoryService {
   def testAddCategory(name: String) = Action {

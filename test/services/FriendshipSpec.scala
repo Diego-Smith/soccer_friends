@@ -2,12 +2,13 @@ package services
 
 
 import org.junit.runner.RunWith
-import it.sf.service.{FriendshipService, UserService}
+import it.sf.service.FriendshipService
 import org.specs2.ScalaCheck
 import play.api.test.WithApplication
 import org.specs2.runner.JUnitRunner
 import org.specs2.mutable.Specification
 import securesocial.core.AuthenticationMethod
+import it.sf.manager.ComponentRegistry
 
 /**
  * Add your spec here.
@@ -22,7 +23,8 @@ class FriendshipSpec extends Specification with ScalaCheck {
 
     "get Correct Friends" in new WithApplication() {
       val friendshipService = new FriendshipService {}
-      val userService = new UserService {}
+      private val componentRegistry: ComponentRegistry = new ComponentRegistry {}
+      private val userService = componentRegistry.userService
       val user1 = userService.insertUser("user1", "user1", "User", "1", AuthenticationMethod.UserPassword, "userpass").user
       val user2 = userService.insertUser("user2", "user1", "User", "1", AuthenticationMethod.UserPassword, "userpass").user
       val user3 = userService.insertUser("user3", "user1", "User", "1", AuthenticationMethod.UserPassword, "userpass").user

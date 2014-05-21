@@ -1,12 +1,12 @@
 package controllers
 
-import play.api.mvc.{Action, Result, Controller, Results}
-import it.sf.service.UserService
+import play.api.mvc.{Action, Result, Controller}
 import it.sf.models.User
 import securesocial.core.SecureSocial
 import play.api.{Routes, Logger}
+import it.sf.manager.ComponentRegistry
 
-object Application extends Controller with UserService with SecureSocial {
+object Application extends Controller with ComponentRegistry with SecureSocial {
 
   val logger = Logger
 
@@ -23,7 +23,7 @@ object Application extends Controller with UserService with SecureSocial {
   //TODO: remove
   def AuthMe(username: String, password: String)(f: User => Result) = Action {
     logger.info(s"Authenticating user(username: $username - password: $password)")
-    val user: Option[User] = findUserByUsername(username.trim(), password.trim())
+    val user: Option[User] = userService.findUserByUsername(username.trim(), password.trim())
     user match {
       case Some(someUser) => f(someUser)
       case None => Forbidden("I don't know you")
