@@ -8,13 +8,13 @@ import play.api.db.slick.Session
 import it.sf.logger.ApplicationLoggerImpl
 import scala.slick.lifted
 import securesocial.core._
-import it.sf.repository.UserRepositoryComponent
+import it.sf.repository.{UserRepository}
 
-trait UserServiceComponent {
-  this: UserRepositoryComponent =>
-  val userService: UserService
+//trait UserServiceComponent {
+//  this: UserRepositoryComponent =>
+//  val userService: UserService
 
-  class UserService extends ApplicationLoggerImpl {
+  class UserService(userRepository: UserRepository) extends ApplicationLoggerImpl {
 
     def findUserByUsername(username: String, password: String): Option[User] = DB.withSession {
       implicit session: Session =>
@@ -88,6 +88,6 @@ trait UserServiceComponent {
 
   }
 
-}
+//}
 
 case class UserValidation(result: Boolean, user: Option[User], errorMessage: String)

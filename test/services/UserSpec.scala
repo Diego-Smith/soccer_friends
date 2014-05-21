@@ -3,7 +3,7 @@ package services
 import org.junit.runner.RunWith
 import it.sf.service._
 import org.specs2.ScalaCheck
-import it.sf.models.{ProviderIdEnum, User}
+import it.sf.models.ProviderIdEnum
 import scala.collection.mutable
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Prop._
@@ -14,8 +14,7 @@ import play.api.libs.Crypto
 import it.sf.service.UserValidation
 import scala.Some
 import it.sf.models.User
-import org.specs2.mock.Mockito
-import it.sf.repository.UserRepositoryComponent
+import it.sf.manager.ComponentRegistry
 
 /**
  * Add your spec here.
@@ -43,7 +42,7 @@ class UserSpec extends Specification with ScalaCheck {
 
     "test scala check" in prop {
       (usernames: List[String]) => {
-        val userService = MockUserRepository.userService
+        val userService = (new MockUserRegistry {}).userService
         var counter = 0
         val resultInsertingUsernames: Boolean = usernames.foldLeft(true) {
           (oldValue: Boolean, username: String) =>
@@ -102,7 +101,7 @@ class MockUserRepository extends it.sf.repository.UserRepository {
   }
 }
 
-object MockUserRepository extends UserServiceComponent with UserRepositoryComponent with Mockito {
-  val userService = new UserService
-  val userRepository = new MockUserRepository
+trait MockUserRegistry extends ComponentRegistry {
+  override lazy val userRepository = new MockUserRepository
+//  override val userService = new UserService
 }

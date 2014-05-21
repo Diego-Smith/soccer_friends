@@ -15,6 +15,7 @@ libraryDependencies ++= Seq(
   //jdbc,
   //anorm,
   cache,
+  "com.softwaremill.macwire" %% "macros" % "0.5",
   "com.typesafe.play" %% "play-slick" % "0.6.0.1",
   "org.webjars" %% "webjars-play" % "2.2.0",
   // Downgrade to JQuery 1.8.3 so that integration tests with HtmlUnit work.

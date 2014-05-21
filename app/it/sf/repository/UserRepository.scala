@@ -11,11 +11,11 @@ import play.api.Play.current
 /**
  * Created by diego on 21/05/14.
  */
-trait UserRepositoryComponent {
-  val userRepository: UserRepository
-}
+//trait UserRepositoryComponent {
+//  val userRepository: UserRepository
+//}
 
-trait UserRepository {
+class UserRepository {
   val users: lifted.TableQuery[UserTable] = TableQuery[UserTable]
   private val insertReturningId = users returning users.map(_.id)
 
