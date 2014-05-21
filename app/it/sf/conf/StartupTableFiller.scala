@@ -40,7 +40,7 @@ with UserInterestService with ConfigurationService {
     insertUser("diego", Crypto.sign("diego"), "Diego", "Smith", AuthenticationMethod.UserPassword, "userpass")
     insertUser("diego.naali@gmail.com", Crypto.sign("diego"), "Diego", "Smith", AuthenticationMethod.UserPassword, "userpass")
     insertUser("10203749685571466facebook", Crypto.sign("password"), "Diego", "Fabbro", AuthenticationMethod.OAuth2, "facebook")
-    insertOrUpdateOauth2(OAuth2Info(4, "thisTokenWillBeChanged", None, Some(5108366), None))
+    insertOrUpdateOauth2(OAuth2Info(4, "thisTokenWillBeChange", None, Some(5108366), None))
 
 
     play.api.db.slick.DB.withSession {

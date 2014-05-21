@@ -12,13 +12,13 @@ case class Configuration(id: Option[Long] = None, key: String, value: String, cr
 class ConfigurationTable(tag: Tag) extends Table[Configuration](tag, "CONFIGURATION") {
 
   def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
-  def key = column[String]("ID_USER", O.NotNull)
-  def value = column[String]("ID_INTEREST", O.NotNull)
+  def key = column[String]("KEY", O.NotNull)
+  def value = column[String]("VALUE", O.NotNull)
   def creationTime = column[DateTime]("CREATION_TIME", O.NotNull)
 
   def * = (id.?, key, value, creationTime) <> (Configuration.tupled, Configuration.unapply)
 
-  def uniqueConfiguration = index("CONF_UNIQUE", (key), unique = true)
+  def uniqueConfiguration = index("CONF_UNIQUE", key, unique = true)
 }
 
 
