@@ -6,13 +6,12 @@ import it.sf.models.{PageVisited, User}
 import play.api.mvc.Request
 import play.api.mvc.Session
 import it.sf.util.Defines
-import it.sf.service.PageVisitedService
 import scala.collection.mutable
 
 /**
  * Created by diego on 11/04/14.
  */
-object SessionManager extends LoggerManager with ComponentRegistry with PageVisitedService {
+object SessionManager extends LoggerManager with ComponentRegistry {
   var map = mutable.Map[String, User]()
 
   //TODO: revisit it
@@ -26,7 +25,7 @@ object SessionManager extends LoggerManager with ComponentRegistry with PageVisi
         }
       case default => Some(Defines.DEFAULT_USER_ID)
     }
-    insertPageVisited(PageVisited(None, webPage, request.remoteAddress, null, idUser))
+    pageVisitedRepository.insertPageVisited(PageVisited(None, webPage, request.remoteAddress, null, idUser))
   }
 
 

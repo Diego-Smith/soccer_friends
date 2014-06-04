@@ -1,11 +1,14 @@
-package it.sf.service
+package it.sf.repository
 
+import it.sf.models.PageVisitedTable
+import it.sf.models.PageVisited
 import play.api.db.slick.Config.driver.simple._
 import play.api.Play.current
-import it.sf.models.{PageVisitedTable, PageVisited}
 import play.api.db.slick.Session
-
-trait PageVisitedService {
+/**
+ * Created by diego on 04/06/14.
+ */
+class PageVisitedRepository {
   val pagesVisited = TableQuery[PageVisitedTable]
 
   def validatePageVisited(visited: PageVisited): Boolean = true

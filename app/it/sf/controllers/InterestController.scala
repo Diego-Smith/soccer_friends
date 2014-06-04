@@ -3,14 +3,14 @@ package controllers
 import play.mvc.Controller
 import securesocial.core.{Identity, SecureSocial}
 import play.api.mvc.Action
-import it.sf.service.InterestService
 import it.sf.util.UserIdentity
 import it.sf.models.Interest
+import it.sf.manager.ComponentRegistry
 
 /**
  * Created by diego on 19/05/14.
  */
-object InterestController extends Controller with SecureSocial with InterestService {
+object InterestController extends Controller with SecureSocial with ComponentRegistry {
   def getItem(id: Long) = Action {
     implicit request =>
       println(s"getItem $id")
@@ -22,13 +22,12 @@ object InterestController extends Controller with SecureSocial with InterestServ
       val user: Identity = request.user
       val userIdentity: UserIdentity = user.asInstanceOf[UserIdentity]
 
-      val interestOpt: Option[Interest] = checkUserInterest(name, userIdentity.userId)
+      val interestOpt: Option[Interest] = interestRepository.checkUserInterest(name, userIdentity.userId)
       interestOpt match {
         case Some(interest) => Ok("false")
-        case None => {
-          insertInterestToUser(name, userIdentity.userId)
+        case None =>
+          interestRepository.insertInterestToUser(name, userIdentity.userId)
           Ok("true")
-        }
       }
 
     }
@@ -39,7 +38,7 @@ object InterestController extends Controller with SecureSocial with InterestServ
     implicit  request => {
 //      logConsole("interestList")
       val userIdentity: UserIdentity = request.user.asInstanceOf[UserIdentity]
-      val userInterests: List[Interest] = getUserInterests(userIdentity.userId)
+      val userInterests: List[Interest] = interestRepository.getUserInterests(userIdentity.userId)
       Ok(views.html.interests.list(userInterests))
     }
   }

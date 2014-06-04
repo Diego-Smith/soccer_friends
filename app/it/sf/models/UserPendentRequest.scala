@@ -2,7 +2,6 @@ package it.sf.models
 
 import play.api.db.slick.Config.driver.simple._
 import scala.slick.lifted.ProvenShape
-import java.sql.Date
 import com.github.tototoshi.slick.H2JodaSupport._
 import org.joda.time.DateTime
 

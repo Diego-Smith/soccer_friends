@@ -1,13 +1,17 @@
-package it.sf.service
+package it.sf.repository
 
+import it.sf.models.OAuth2InfoTable
+import scala.Some
+import it.sf.models.OAuth2Info
+import scala.slick.lifted
+import scala.slick.lifted.TableQuery
 import play.api.db.slick.Config.driver.simple._
 import play.api.Play.current
-import it.sf.models.{OAuth2Info, OAuth2InfoTable, PageVisitedTable, PageVisited}
 import play.api.db.slick.Session
-import scala.slick.lifted
-
-
-trait OAuth2Service {
+/**
+ * Created by diego on 04/06/14.
+ */
+class OAuth2Repository {
   val oAuth2Info = TableQuery[OAuth2InfoTable]
 
   def insertOauth2(oauth2: OAuth2Info) = {

@@ -6,24 +6,20 @@ import it.sf.models._
 import scala.slick.driver.H2Driver.simple._
 import slick.driver.H2Driver.backend.DatabaseDef
 import play.api.db.DB
-import it.sf.service._
 import securesocial.core.AuthenticationMethod
 import play.api.libs.Crypto
 import scala.Some
 import it.sf.models.OAuth2Info
 import it.sf.models.Category
-import it.sf.models.UserInterest.Configuration
-import it.sf.service.impl.CategoryService
 import it.sf.manager.ComponentRegistry
 
-object StartupTableFiller extends LoggerManager with ComponentRegistry with CategoryService with FriendshipService with OAuth2Service with InterestService
-with UserInterestService with ConfigurationService {
+object StartupTableFiller extends LoggerManager with ComponentRegistry {
   def obtainDB: DatabaseDef = Database.forDataSource(DB.getDataSource())
 
   def startupFill() = {
     obtainDB
 
-    val dbAlreadyFilledOption: Option[Configuration] = findConfigurationByKey("DB_SETUP")
+    val dbAlreadyFilledOption: Option[Configuration] = configurationRepository.findConfigurationByKey("DB_SETUP")
 
     dbAlreadyFilledOption match {
       case Some(dbAlreadyFilled) => logger.info("RELOAD - DETECTED TABLES ALREADY FILLED")
@@ -31,7 +27,7 @@ with UserInterestService with ConfigurationService {
         fillCategories
         fillUserTable
         fillFriendship
-        insertConfiguration("DB_SETUP", "CREATE THIS TO PREVENT OTHER INSERTS ON RELOAD")
+        configurationRepository.insertConfiguration("DB_SETUP", "CREATE THIS TO PREVENT OTHER INSERTS ON RELOAD")
     }
 
   }
@@ -41,29 +37,29 @@ with UserInterestService with ConfigurationService {
     userService.insertUser("diego", Crypto.sign("diego"), "Diego", "Smith", AuthenticationMethod.UserPassword, "userpass")
     userService.insertUser("diego.naali@gmail.com", Crypto.sign("diego"), "Diego", "Smith", AuthenticationMethod.UserPassword, "userpass")
     userService.insertUser("10203749685571466facebook", Crypto.sign("password"), "Diego", "Fabbro", AuthenticationMethod.OAuth2, "facebook")
-    insertOrUpdateOauth2(OAuth2Info(4, "thisTokenWillBeChange", None, Some(5108366), None))
+    oAuth2Repository.insertOrUpdateOauth2(OAuth2Info(4, "thisTokenWillBeChange", None, Some(5108366), None))
 
 
     play.api.db.slick.DB.withSession {
       implicit session: Session => {
-        interests += Interest(None, "fantasy", 4, Some(1))
-        interests += Interest(None, "horror", 4, Some(1))
-        interests += Interest(None, "football", 4, Some(3))
+        interestRepository.interests += Interest(None, "fantasy", 4, Some(1))
+        interestRepository.interests += Interest(None, "horror", 4, Some(1))
+        interestRepository.interests += Interest(None, "football", 4, Some(3))
 
       }
     }
-    insertUserInterest(4, 1)
-    insertUserInterest(4, 2)
-    insertUserInterest(4, 3)
-    insertUserInterest(2, 1)
+    userInterestRepository.insertUserInterest(4, 1)
+    userInterestRepository.insertUserInterest(4, 2)
+    userInterestRepository.insertUserInterest(4, 3)
+    userInterestRepository.insertUserInterest(2, 1)
   }
 
   def fillCategories() {
 
 
-    insertCategory(Category(None, "book"))
-    insertCategory(Category(None, "school"))
-    insertCategory(Category(None, "sport"))
+    categoryRepository.insertCategory(Category(None, "book"))
+    categoryRepository.insertCategory(Category(None, "school"))
+    categoryRepository.insertCategory(Category(None, "sport"))
   }
 
   def fillFriendship() {

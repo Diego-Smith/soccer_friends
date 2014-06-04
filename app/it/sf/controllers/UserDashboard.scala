@@ -2,14 +2,14 @@ package it.sf.controllers
 
 import play.mvc.Controller
 import securesocial.core.SecureSocial
-import it.sf.service.{InterestService}
 import it.sf.util.UserIdentity
+import it.sf.manager.ComponentRegistry
 
 
 /**
  * Created by diego on 15/05/14.
  */
-object UserDashboard extends Controller with SecureSocial with InterestService {
+object UserDashboard extends Controller with SecureSocial with ComponentRegistry {
   def user() = SecuredAction {
     implicit request =>
 
@@ -17,7 +17,7 @@ object UserDashboard extends Controller with SecureSocial with InterestService {
 
       val ui: UserIdentity = request.user.asInstanceOf[UserIdentity]
 
-      val interests = getUserInterests(ui.userId)
+      val interests = interestRepository.getUserInterests(ui.userId)
 
       Ok(views.html.user.dashboard(request.user, interests))
 

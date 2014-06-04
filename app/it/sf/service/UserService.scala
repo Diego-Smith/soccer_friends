@@ -3,10 +3,10 @@ package it.sf.service
 import it.sf.models.{AuthenticationMethodEnum, User}
 import it.sf.logger.LoggerManager
 import securesocial.core._
-import it.sf.repository.UserRepositoryInterface
+import it.sf.repository.UserRepository
 
 
-class UserService(userRepository: UserRepositoryInterface) extends LoggerManager {
+class UserService(userRepository: UserRepository) extends LoggerManager {
 
   def findUserByUsername(username: String, password: String): Option[User] = userRepository.dbFindUserByUsername(username, password)
 
@@ -20,7 +20,7 @@ class UserService(userRepository: UserRepositoryInterface) extends LoggerManager
 
   def findUsers(ids: Seq[Long]): Seq[User] = userRepository.dbFindUsers(ids)
 
-  def findUserByUsername(username: String): Option[User] = userRepository.dbFindUserByUserName(username)
+  def findUserByUsername(username: String): Option[User] = userRepository.dbFindUserByUsername(username)
 
   def insertUser(user: User): UserValidation = validateUser(user) match {
     case (true, reason) =>

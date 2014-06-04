@@ -1,9 +1,7 @@
-package it.sf.models.UserInterest
+package it.sf.models
 
 import scala.slick.lifted.ProvenShape.proveShapeOf
 import play.api.db.slick.Config.driver.simple._
-import it.sf.service.{InterestService}
-import it.sf.models.{InterestTable, UserTable}
 import org.joda.time.DateTime
 import com.github.tototoshi.slick.H2JodaSupport._
 

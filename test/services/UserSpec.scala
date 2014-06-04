@@ -12,7 +12,7 @@ import securesocial.core.AuthenticationMethod
 import it.sf.service.UserValidation
 import scala.Some
 import it.sf.manager.ComponentRegistry
-import it.sf.repository.UserRepositoryInterface
+import it.sf.repository.UserRepository
 import scala.slick.lifted.TableQuery
 
 /**
@@ -87,14 +87,14 @@ class UserSpec extends Specification with ScalaCheck with MockUserRegistry {
   }
 }
 
-class MockUserRepository extends UserRepositoryInterface {
+class MockUserRepository extends UserRepository {
   var mutableList = mutable.LinkedList[User]()
   override def dbInsertUser(user: User): Long = {
     mutableList = mutableList.+:(user)
     mutableList.size
   }
 
-  override def dbFindUserByUserName(username: String): Option[User] = {
+  override def dbFindUserByUsername(username: String): Option[User] = {
     val filter: mutable.LinkedList[User] = mutableList.filter(_.username.equals(username))
     if (filter.size > 0) {
 //      if (username.length > 1) {

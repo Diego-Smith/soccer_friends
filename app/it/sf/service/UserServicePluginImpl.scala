@@ -16,19 +16,19 @@ import it.sf.util.UserIdentity
 import it.sf.manager.ComponentRegistry
 
 class UserServicePluginImpl(application: Application) extends UserServicePlugin(application: Application)
-    with ComponentRegistry with OAuth2Service with UserPendentRequestService with LoggerManager {
+    with ComponentRegistry with LoggerManager {
   override def deleteExpiredTokens(): Unit = {
-    deleteOldPendentRequests
+    userPendentRequestRepository.deleteOldPendentRequests
   }
 
   override def deleteToken(uuid: String): Unit = {
     logger.info(s"deleteToken $uuid")
-    deletePendentRequest(uuid)
+    userPendentRequestRepository.deletePendentRequest(uuid)
   }
 
   override def findToken(token: String): Option[Token] = {
     logger.info(s"findToken $token")
-    val optUPRT: Option[UserPendentRequest] = findPendentRequest(token)
+    val optUPRT: Option[UserPendentRequest] = userPendentRequestRepository.findPendentRequest(token)
     val optToken: Option[Token] = optUPRT.map(upr => Token(upr.token, upr.email, upr.creationTime, upr.expirationTime, upr.isSignup))
     optToken
   }
@@ -37,7 +37,7 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
     logger.info(s"save $token")
     val optionUser = userService.findUserByUsername(token.email)
     val upr: UserPendentRequest = UserPendentRequest(token.email, token.uuid, token.creationTime, token.expirationTime, !optionUser.isDefined)
-    insertPendentRequest(upr)
+    userPendentRequestRepository.insertPendentRequest(upr)
   }
 
   override def save(user: Identity): Identity = {
@@ -70,7 +70,7 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
             val oauth2Info: OAuth2Info = user.oAuth2Info.get
 
             val oauth2InfoTable = it.sf.models.OAuth2Info(u.id.get, oauth2Info.accessToken, oauth2Info.tokenType, oauth2Info.expiresIn, oauth2Info.refreshToken)
-            updateOauth2(oauth2InfoTable)
+            oAuth2Repository.updateOauth2(oauth2InfoTable)
         }
 
       case None =>
@@ -90,7 +90,7 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
             case AuthenticationMethod.OAuth2 =>
               val oauth2Info: OAuth2Info = user.oAuth2Info.get
               val oauth2InfoTable = it.sf.models.OAuth2Info(userId, oauth2Info.accessToken, oauth2Info.tokenType, oauth2Info.expiresIn, oauth2Info.refreshToken)
-              insertOauth2(oauth2InfoTable)
+              oAuth2Repository.insertOauth2(oauth2InfoTable)
           }
         }
     }

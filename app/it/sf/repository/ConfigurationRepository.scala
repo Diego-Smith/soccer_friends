@@ -1,16 +1,15 @@
-package it.sf.service
+package it.sf.repository
 
 import scala.slick.lifted.TableQuery
-import it.sf.models.UserInterest.{ConfigurationTable, Configuration, UserInterestTable, UserInterest}
-import play.api.db.slick.Config.driver.simple._
 import org.joda.time.DateTime
-import play.api.db.slick._
+import play.api.db.slick.Config.driver.simple._
 import play.api.Play.current
+import it.sf.models.{Configuration, ConfigurationTable}
 
 /**
  * Created by diego on 15/05/14.
  */
-trait ConfigurationService {
+class ConfigurationRepository {
   val configurations = TableQuery[ConfigurationTable]
 
   def insertConfiguration(key: String, value: String) {

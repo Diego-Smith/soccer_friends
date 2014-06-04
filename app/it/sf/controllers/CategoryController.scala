@@ -3,9 +3,9 @@ package it.sf.controllers
 import play.api.mvc._
 import it.sf.models.Category
 import scala.util.Random
-import it.sf.service.impl.CategoryService
+import it.sf.manager.ComponentRegistry
 
-object CategoryController extends Controller with CategoryService {
+object CategoryController extends Controller with ComponentRegistry {
   def testAddCategory(name: String) = Action {
     val cat = Category(None, name)
     //	  insertCategory(cat)
@@ -14,7 +14,7 @@ object CategoryController extends Controller with CategoryService {
   }
 
   def listCategories() = Action {
-    val categories = list
+    val categories = categoryRepository.list
     Ok(s"Categories: \n\n${categories.map(_.name).mkString("\n")}")
   }
 
@@ -25,7 +25,7 @@ object CategoryController extends Controller with CategoryService {
       a <- 0 to numIterations
       number = Random.nextInt(8) + 3
     } yield Random.alphanumeric.slice(0, number).mkString
-    strings.foreach(cat => insertCategory(Category(None, cat)))
+    strings.foreach(cat => categoryRepository.insertCategory(Category(None, cat)))
     strings
   }
 

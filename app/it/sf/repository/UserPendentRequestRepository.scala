@@ -1,14 +1,18 @@
-package it.sf.service
+package it.sf.repository
 
+import it.sf.models.UserPendentRequestTable
+import play.api.db.slick._
+import it.sf.models.UserPendentRequest
+import scala.slick.lifted
+import org.joda.time.DateTime
 import play.api.db.slick.Config.driver.simple._
 import play.api.Play.current
-import it.sf.models._
-import play.api.db.slick.{Session, DB}
-import scala.slick.lifted
-import org.joda.time.{DateTime, DateTimeZone}
+import play.api.db.slick.Session
 import com.github.tototoshi.slick.H2JodaSupport._
-
-trait UserPendentRequestService {
+/**
+ * Created by diego on 04/06/14.
+ */
+class UserPendentRequestRepository {
   val requests = TableQuery[UserPendentRequestTable]
 
   def insertPendentRequest(userPendentRequest: UserPendentRequest) : Boolean = {

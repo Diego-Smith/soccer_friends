@@ -11,18 +11,18 @@ import play.api.Play.current
 /**
  * Created by diego on 21/05/14.
  */
-trait UserRepositoryInterface {
+trait UserRepository {
   val users: lifted.TableQuery[UserTable]
-  def dbFindUserByUsername(username: String, password: String): Option[User]
   def dbInsertUser(user: User): Long
-  def dbFindUserByUserName(username: String): Option[User]
+  def dbFindUserByUsername(username: String): Option[User]
+  def dbFindUserByUsername(username: String, password: String): Option[User]
   def dbFindUserById(id: Long): Option[User]
   def dbFindUsers(ids: Seq[Long]): Seq[User]
   def dbUpdatePassword(username: String, password: String)
   def dbGetUsersList() : List[User]
 }
 
-class UserRepository extends UserRepositoryInterface {
+class DBUserRepository extends UserRepository {
   val users: lifted.TableQuery[UserTable] = TableQuery[UserTable]
   private val insertReturningId = users returning users.map(_.id)
 
@@ -43,9 +43,7 @@ class UserRepository extends UserRepositoryInterface {
     }
   }
 
-
   private val invoker = insertReturningId.insertInvoker
-
 
   def dbInsertUser3(user: User): Long = {
     play.api.db.slick.DB.withSession {
@@ -75,13 +73,11 @@ class UserRepository extends UserRepositoryInterface {
     }
   }
 
-
-  def dbFindUserByUserName(username: String): Option[User] = DB.withSession {
+  override def dbFindUserByUsername(username: String): Option[User] = DB.withSession {
     implicit session: Session =>
       users.filter(_.username === username).firstOption
   }
 
-  //  val users: lifted.TableQuery[UserTable]
   override def dbFindUserByUsername(username: String, password: String): Option[User] =  DB.withSession {
     implicit session: Session =>
       users.filter(user => user.username === username && user.password === password).firstOption

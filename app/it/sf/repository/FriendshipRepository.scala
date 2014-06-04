@@ -1,4 +1,4 @@
-package it.sf.service
+package it.sf.repository
 
 import play.api.db.slick.Config.driver.simple._
 import play.api.Play.current
@@ -7,7 +7,10 @@ import play.api.db.slick.Session
 import scala.language.implicitConversions
 import it.sf.manager.ComponentRegistry
 
-trait FriendshipService extends ComponentRegistry {
+/**
+ * Created by diego on 04/06/14.
+ */
+class FriendshipRepository extends ComponentRegistry {
   val friendShips = TableQuery[FriendshipTable]
 
   def validateFriendshipAndReturnCorrectValue(idUserA: Long, idUserB: Long): (Boolean, String) = (true, "")
@@ -31,5 +34,6 @@ trait FriendshipService extends ComponentRegistry {
     (friendShips.filter(_.fkUserA === userId).map(_.fkUserB) ++ friendShips.filter(_.fkUserB === userId).map(_.fkUserA)).run.getUsers
   }
 }
+
 
 case class FriendshipInsertResult(friendship: Option[Friendship], result: Boolean)

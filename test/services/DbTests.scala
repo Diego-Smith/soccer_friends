@@ -1,7 +1,7 @@
 package services
 
 import org.junit.runner.RunWith
-import it.sf.service.{InterestService, OAuth2Service}
+import it.sf.service.{InterestRepository, OAuth2Repository}
 import org.specs2.ScalaCheck
 import play.api.test.WithApplication
 import org.specs2.runner.JUnitRunner
@@ -29,7 +29,7 @@ class DbTests extends Specification with ScalaCheck {
 
       private val componentRegistry: ComponentRegistry = new ComponentRegistry {}
       private val userService = componentRegistry.userService
-      private val interestService: InterestService with Object = new InterestService {}
+      private val interestService: InterestRepository with Object = new InterestRepository {}
       play.api.db.slick.DB.withSession {
         implicit session: Session => {
           val user4: Option[User] = userService.findUserById(4)
