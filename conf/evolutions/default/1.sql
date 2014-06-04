@@ -19,8 +19,8 @@ create table "USER_PENDENT_REQUEST" ("EMAIL" VARCHAR NOT NULL,"TOKEN" VARCHAR NO
 create unique index "UNIQUE_TOKEN" on "USER_PENDENT_REQUEST" ("TOKEN");
 alter table "FRIENDSHIP" add constraint "FK_USER_A" foreign key("ID_USER_A") references "USER"("ID") on update NO ACTION on delete NO ACTION;
 alter table "FRIENDSHIP" add constraint "FK_USER_B" foreign key("ID_USER_B") references "USER"("ID") on update NO ACTION on delete NO ACTION;
-alter table "INTEREST" add constraint "CAT_FK" foreign key("ID_CATEGORY") references "CATEGORY"("ID") on update NO ACTION on delete NO ACTION;
 alter table "INTEREST" add constraint "USER_FK" foreign key("CREATED_BY_USER_ID") references "USER"("ID") on update NO ACTION on delete NO ACTION;
+alter table "INTEREST" add constraint "CAT_FK" foreign key("ID_CATEGORY") references "CATEGORY"("ID") on update NO ACTION on delete NO ACTION;
 alter table "PAGE_VISITED" add constraint "FK_USER" foreign key("ID_USER") references "USER"("ID") on update NO ACTION on delete NO ACTION;
 alter table "USER_INTEREST" add constraint "UI_INTEREST_FK" foreign key("ID_INTEREST") references "INTEREST"("ID") on update NO ACTION on delete NO ACTION;
 alter table "USER_INTEREST" add constraint "UI_USER_FK" foreign key("ID_USER") references "USER"("ID") on update NO ACTION on delete NO ACTION;
@@ -30,8 +30,8 @@ alter table "USER_OAUTH2INFO" add constraint "FK_USER_ID" foreign key("USER_ID")
 
 alter table "FRIENDSHIP" drop constraint "FK_USER_A";
 alter table "FRIENDSHIP" drop constraint "FK_USER_B";
-alter table "INTEREST" drop constraint "CAT_FK";
 alter table "INTEREST" drop constraint "USER_FK";
+alter table "INTEREST" drop constraint "CAT_FK";
 alter table "PAGE_VISITED" drop constraint "FK_USER";
 alter table "USER_INTEREST" drop constraint "UI_INTEREST_FK";
 alter table "USER_INTEREST" drop constraint "UI_USER_FK";

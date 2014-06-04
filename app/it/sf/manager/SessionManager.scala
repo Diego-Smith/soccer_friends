@@ -1,18 +1,18 @@
 package it.sf.manager
 
-import it.sf.logger.ApplicationLoggerImpl
+import it.sf.logger.LoggerManager
 
 import it.sf.models.{PageVisited, User}
 import play.api.mvc.Request
 import play.api.mvc.Session
 import it.sf.util.Defines
-import it.sf.service.{PageVisitedService}
+import it.sf.service.PageVisitedService
 import scala.collection.mutable
 
 /**
  * Created by diego on 11/04/14.
  */
-object SessionManager extends ApplicationLoggerImpl with ComponentRegistry with PageVisitedService {
+object SessionManager extends LoggerManager with ComponentRegistry with PageVisitedService {
   var map = mutable.Map[String, User]()
 
   //TODO: revisit it
@@ -40,7 +40,7 @@ object SessionManager extends ApplicationLoggerImpl with ComponentRegistry with 
 
   def getUserSession(session: Session): Option[User] = {
     val hashCodeOption = session.get(Defines.SESSION_USER_KEY)
-    logConsole(s"hashcode: $hashCodeOption \nmap: ${map.toString} \nsession: $session \n")
+    logger.info(s"hashcode: $hashCodeOption \nmap: ${map.toString} \nsession: $session \n")
     hashCodeOption match {
       case None => None
       case Some(hashCode) => map.get(hashCode)

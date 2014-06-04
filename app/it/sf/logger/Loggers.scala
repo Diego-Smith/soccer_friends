@@ -1,20 +1,23 @@
 package it.sf.logger
 
 import play.Logger
+import scala.runtime.AbstractPartialFunction
 
 trait ApplicationLogger {
-  def logConsole(text: String): Unit
+  def info(text: String): Unit
 }
 
-trait ApplicationLoggerImpl extends ApplicationLogger {
+trait LoggerManager {
+
+  val logger = new LoggerSoccerFriends
   val LOG_ROW_PREFIX = "[soccerFriends] :: "
   val LOG_PREFIX = ""
   val LOG_POSTFIX = LOG_PREFIX
 
-  override def logConsole(text: String) = {
-    Logger.info(
-      text.split("\n").map(s => s.mkString(LOG_ROW_PREFIX, "", "\n")).mkString(LOG_PREFIX, "", LOG_POSTFIX)
-    )
+  class LoggerSoccerFriends extends ApplicationLogger {
+    def info(text: String) = {
+      Logger.info(text.split("\n").map(s => s.mkString(LOG_ROW_PREFIX, "", "\n")).mkString(LOG_PREFIX, "", LOG_POSTFIX)
+      )
+    }
   }
-
 }

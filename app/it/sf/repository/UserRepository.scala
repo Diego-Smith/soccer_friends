@@ -12,7 +12,7 @@ import play.api.Play.current
  * Created by diego on 21/05/14.
  */
 trait UserRepositoryInterface {
-//  val users: lifted.TableQuery[UserTable]
+  val users: lifted.TableQuery[UserTable]
   def dbFindUserByUsername(username: String, password: String): Option[User]
   def dbInsertUser(user: User): Long
   def dbFindUserByUserName(username: String): Option[User]

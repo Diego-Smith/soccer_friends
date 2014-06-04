@@ -1,6 +1,6 @@
 package it.sf.conf
 
-import it.sf.logger.ApplicationLoggerImpl
+import it.sf.logger.LoggerManager
 import play.api.Play.current
 import it.sf.models._
 import scala.slick.driver.H2Driver.simple._
@@ -16,7 +16,7 @@ import it.sf.models.UserInterest.Configuration
 import it.sf.service.impl.CategoryService
 import it.sf.manager.ComponentRegistry
 
-object StartupTableFiller extends ApplicationLoggerImpl with ComponentRegistry with CategoryService with FriendshipService with OAuth2Service with InterestService
+object StartupTableFiller extends LoggerManager with ComponentRegistry with CategoryService with FriendshipService with OAuth2Service with InterestService
 with UserInterestService with ConfigurationService {
   def obtainDB: DatabaseDef = Database.forDataSource(DB.getDataSource())
 
@@ -26,7 +26,7 @@ with UserInterestService with ConfigurationService {
     val dbAlreadyFilledOption: Option[Configuration] = findConfigurationByKey("DB_SETUP")
 
     dbAlreadyFilledOption match {
-      case Some(dbAlreadyFilled) => logConsole("RELOAD - DETECTED TABLES ALREADY FILLED")
+      case Some(dbAlreadyFilled) => logger.info("RELOAD - DETECTED TABLES ALREADY FILLED")
       case _ =>
         fillCategories
         fillUserTable

@@ -1,13 +1,12 @@
-import it.sf.logger.ApplicationLoggerImpl
+import it.sf.logger.LoggerManager
 import play.api.GlobalSettings
 import play.api.Application
 import it.sf.conf.StartupTableFiller
-import play.api.mvc.Action
 
 
-object Global extends GlobalSettings with ApplicationLoggerImpl {
+object Global extends GlobalSettings with LoggerManager {
   override def onStart(app: Application) {
-    logConsole("Application Started")
+    logger.info("Application Started")
     // lazy val database = Database.forDataSource(DB.getDataSource())
 
     StartupTableFiller.startupFill

@@ -11,37 +11,37 @@ import securesocial.core.providers.Token
 import scala.Some
 import play.api.libs.Crypto
 import it.sf.models.UserPendentRequest
-import it.sf.logger.ApplicationLoggerImpl
+import it.sf.logger.LoggerManager
 import it.sf.util.UserIdentity
 import it.sf.manager.ComponentRegistry
 
 class UserServicePluginImpl(application: Application) extends UserServicePlugin(application: Application)
-    with ComponentRegistry with OAuth2Service with UserPendentRequestService with ApplicationLoggerImpl {
+    with ComponentRegistry with OAuth2Service with UserPendentRequestService with LoggerManager {
   override def deleteExpiredTokens(): Unit = {
     deleteOldPendentRequests
   }
 
   override def deleteToken(uuid: String): Unit = {
-    logConsole(s"deleteToken $uuid")
+    logger.info(s"deleteToken $uuid")
     deletePendentRequest(uuid)
   }
 
   override def findToken(token: String): Option[Token] = {
-    logConsole(s"findToken $token")
+    logger.info(s"findToken $token")
     val optUPRT: Option[UserPendentRequest] = findPendentRequest(token)
     val optToken: Option[Token] = optUPRT.map(upr => Token(upr.token, upr.email, upr.creationTime, upr.expirationTime, upr.isSignup))
     optToken
   }
 
   override def save(token: Token): Unit = {
-    logConsole(s"save $token")
+    logger.info(s"save $token")
     val optionUser = userService.findUserByUsername(token.email)
     val upr: UserPendentRequest = UserPendentRequest(token.email, token.uuid, token.creationTime, token.expirationTime, !optionUser.isDefined)
     insertPendentRequest(upr)
   }
 
   override def save(user: Identity): Identity = {
-    logConsole(s"save $user")
+    logger.info(s"save $user")
 
     val username = {
       user.identityId match {
@@ -55,12 +55,12 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
     val optionUser = userService.findUserByUsername(username)
 
     optionUser match {
-      case Some(u) => {
+      case Some(u) =>
 
         user.passwordInfo match {
           case Some(pi) =>
             userService.updatePassword(username, pi.password)
-            logConsole(s"updated password for username $username, new password: ${user.passwordInfo}")
+            logger.info(s"updated password for username $username, new password: ${user.passwordInfo}")
 
           case _ =>
         }
@@ -72,7 +72,6 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
             val oauth2InfoTable = it.sf.models.OAuth2Info(u.id.get, oauth2Info.accessToken, oauth2Info.tokenType, oauth2Info.expiresIn, oauth2Info.refreshToken)
             updateOauth2(oauth2InfoTable)
         }
-      }
 
       case None =>
         val password = {
@@ -83,7 +82,7 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
         }
         val userValidation: UserValidation = userService.insertUser(username, password,
             user.firstName, user.lastName, user.authMethod, user.identityId.providerId)
-        logConsole(s"${userValidation.result} error ${userValidation.errorMessage}")
+        logger.info(s"${userValidation.result} error ${userValidation.errorMessage}")
 
         if (userValidation.result) {
           val userId = userValidation.user.get.id.get
@@ -100,7 +99,7 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
   }
 
   override def findByEmailAndProvider(email: String, providerId: String): Option[Identity] = {
-    logConsole(s"finding email $email providerId $providerId")
+    logger.info(s"finding email $email providerId $providerId")
     val optionUser = {
       providerId match {
         case "userpass" => userService.findUserByUsername(email)
@@ -119,7 +118,7 @@ class UserServicePluginImpl(application: Application) extends UserServicePlugin(
   }
 
   override def find(id: IdentityId): Option[Identity] = {
-    logConsole(s"finding id $id")
+    logger.info(s"finding id $id")
     val optionUser = {
       id match {
         case IdentityId(_, "userpass") =>

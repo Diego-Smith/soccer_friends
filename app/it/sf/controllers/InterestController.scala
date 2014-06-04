@@ -6,12 +6,11 @@ import play.api.mvc.Action
 import it.sf.service.InterestService
 import it.sf.util.UserIdentity
 import it.sf.models.Interest
-import it.sf.logger.ApplicationLoggerImpl
 
 /**
  * Created by diego on 19/05/14.
  */
-object InterestController extends Controller with SecureSocial with InterestService with ApplicationLoggerImpl {
+object InterestController extends Controller with SecureSocial with InterestService {
   def getItem(id: Long) = Action {
     implicit request =>
       println(s"getItem $id")
