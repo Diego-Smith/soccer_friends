@@ -24,7 +24,7 @@ class PerformanceSlickTest extends Specification with ScalaCheck {
       //case class User(id: Option[Int] = None, username: String, password: String, name: Option[String], surname: Option[String], authMethod: String, providerId: String) {
       (1 to 40000).foreach(intVal => {
         val user: User = User(None, s"user1$intVal", "user1", Some("diego"), Some("diego"), "test", "userpass")
-        componentRegistry.userRepository.dbInsertUser4(user)
+        componentRegistry.userRepository.dbInsertUser(user)
       })
     }
 

@@ -3,14 +3,15 @@ package it.sf.models
 import scala.slick.lifted.ProvenShape.proveShapeOf
 import play.api.db.slick.Config.driver.simple._
 import play.api.db.slick.Config.driver.simple.Tag
-import it.sf.manager.ComponentRegistry
+import scala.slick.lifted
+import scala.slick.lifted.TableQuery
 
 /**
  * Created by diego on 12/05/14.
  */
 case class OAuth2Info(userId: Long, accessToken: String, tokenType: Option[String], expiresIn: Option[Int], refreshToken: Option[String])
 
-class OAuth2InfoTable(tag: Tag) extends Table[OAuth2Info](tag, "USER_OAUTH2INFO") with ComponentRegistry {
+class OAuth2InfoTable(tag: Tag) extends Table[OAuth2Info](tag, "USER_OAUTH2INFO") {
   def userId = column[Long]("USER_ID", O.PrimaryKey)
 
   def accessToken = column[String]("ACCESS_TOKEN", O.NotNull)
@@ -19,7 +20,9 @@ class OAuth2InfoTable(tag: Tag) extends Table[OAuth2Info](tag, "USER_OAUTH2INFO"
   def refreshToken = column[String]("REFRESH_TOKEN", O.Nullable)
 
   def * = (userId, accessToken, tokenType.?, expiresIn.?, refreshToken.?) <>(OAuth2Info.tupled, OAuth2Info.unapply)
-  def userA = foreignKey("FK_USER_ID", userId, userRepository.users)(_.id)
+
+  val users: lifted.TableQuery[UserTable] = TableQuery[UserTable]
+  def userA = foreignKey("FK_USER_ID", userId, users)(_.id)
 }
 
 

@@ -11,11 +11,18 @@ import play.api.Play.current
 /**
  * Created by diego on 21/05/14.
  */
-//trait UserRepositoryComponent {
-//  val userRepository: UserRepository
-//}
+trait UserRepositoryInterface {
+//  val users: lifted.TableQuery[UserTable]
+  def dbFindUserByUsername(username: String, password: String): Option[User]
+  def dbInsertUser(user: User): Long
+  def dbFindUserByUserName(username: String): Option[User]
+  def dbFindUserById(id: Long): Option[User]
+  def dbFindUsers(ids: Seq[Long]): Seq[User]
+  def dbUpdatePassword(username: String, password: String)
+  def dbGetUsersList() : List[User]
+}
 
-class UserRepository {
+class UserRepository extends UserRepositoryInterface {
   val users: lifted.TableQuery[UserTable] = TableQuery[UserTable]
   private val insertReturningId = users returning users.map(_.id)
 
@@ -74,4 +81,35 @@ class UserRepository {
       users.filter(_.username === username).firstOption
   }
 
+  //  val users: lifted.TableQuery[UserTable]
+  override def dbFindUserByUsername(username: String, password: String): Option[User] =  DB.withSession {
+    implicit session: Session =>
+      users.filter(user => user.username === username && user.password === password).firstOption
+  }
+
+  override def dbFindUserById(id: Long): Option[User] = DB.withSession {
+    implicit session: Session =>
+      users.filter(_.id === id).firstOption
+  }
+
+  override def dbFindUsers(ids: Seq[Long]): Seq[User] = DB.withSession {
+    implicit session: Session =>
+      users.filter(_.id inSetBind ids).list
+  }
+
+  override def dbUpdatePassword(username: String, password: String): Unit = {
+    DB.withSession {
+      implicit session: Session =>
+        val q = for {
+          user <- users
+          if user.username === username
+        } yield user.password
+        q.update(password)
+    }
+  }
+
+  override def dbGetUsersList(): List[User] = DB.withSession {
+    implicit session: Session =>
+      users.list
+  }
 }

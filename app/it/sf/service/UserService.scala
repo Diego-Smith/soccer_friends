@@ -8,23 +8,16 @@ import play.api.db.slick.Session
 import it.sf.logger.ApplicationLoggerImpl
 import scala.slick.lifted
 import securesocial.core._
-import it.sf.repository.{UserRepository}
+import it.sf.repository.{UserRepositoryInterface, UserRepository}
 
 //trait UserServiceComponent {
 //  this: UserRepositoryComponent =>
 //  val userService: UserService
 
-  class UserService(userRepository: UserRepository) extends ApplicationLoggerImpl {
+  class UserService(userRepository: UserRepositoryInterface) extends ApplicationLoggerImpl {
 
-    def findUserByUsername(username: String, password: String): Option[User] = DB.withSession {
-      implicit session: Session =>
-        userRepository.users.filter(user => user.username === username && user.password === password).firstOption
-    }
-
-    def findUserById(id: Long): Option[User] = DB.withSession {
-      implicit session: Session =>
-        userRepository.users.filter(_.id === id).firstOption
-    }
+    def findUserByUsername(username: String, password: String): Option[User] = userRepository.dbFindUserByUsername(username, password)
+    def findUserById(id: Long): Option[User] = userRepository.dbFindUserById(id)
 
     class UserIdList[Long](val source: Seq[scala.Long]) {
       def getUsers: Seq[User] = {
@@ -32,10 +25,7 @@ import it.sf.repository.{UserRepository}
       }
     }
 
-    def findUsers(ids: Seq[Long]): Seq[User] = DB.withSession {
-      implicit session: Session =>
-        userRepository.users.filter(_.id inSetBind ids).list
-    }
+    def findUsers(ids: Seq[Long]): Seq[User] = userRepository.dbFindUsers(ids)
 
     def findUserByUsername(username: String): Option[User] = userRepository.dbFindUserByUserName(username)
 
@@ -51,16 +41,7 @@ import it.sf.repository.{UserRepository}
       insertUser(user)
     }
 
-    def updatePassword(username: String, password: String) = {
-      DB.withSession {
-        implicit session: Session =>
-          val q = for {
-            user <- userRepository.users
-            if user.username === username
-          } yield user.password
-          q.update(password)
-      }
-    }
+    def updatePassword(username: String, password: String) = userRepository.dbUpdatePassword(username, password)
 
     def validateUser(user: User) = {
       val checkedUser = findUserByUsername(user.username)
@@ -80,11 +61,7 @@ import it.sf.repository.{UserRepository}
       }
     }
 
-    def getUsersList = DB.withSession {
-      implicit session: Session =>
-        userRepository.users.list
-
-    }
+    def getUsersList() : List[User] = userRepository.dbGetUsersList()
 
   }
 

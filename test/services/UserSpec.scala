@@ -3,18 +3,16 @@ package services
 import org.junit.runner.RunWith
 import it.sf.service._
 import org.specs2.ScalaCheck
-import it.sf.models.ProviderIdEnum
+import it.sf.models.{User}
 import scala.collection.mutable
 import org.scalacheck.{Arbitrary, Gen}
-import org.scalacheck.Prop._
 import org.specs2.runner.JUnitRunner
 import org.specs2.mutable.Specification
 import securesocial.core.AuthenticationMethod
-import play.api.libs.Crypto
 import it.sf.service.UserValidation
 import scala.Some
-import it.sf.models.User
 import it.sf.manager.ComponentRegistry
+import it.sf.repository.UserRepositoryInterface
 
 /**
  * Add your spec here.
@@ -22,7 +20,7 @@ import it.sf.manager.ComponentRegistry
  * For more information, consult the wiki.
  */
 @RunWith(classOf[JUnitRunner])
-class UserSpec extends Specification with ScalaCheck {
+class UserSpec extends Specification with ScalaCheck with MockUserRegistry {
 
   val caseValues: Seq[Char] = "abcdefghijklmnopqrstuvwxyz123456780!£&".toSeq
 
@@ -42,11 +40,10 @@ class UserSpec extends Specification with ScalaCheck {
 
     "test scala check" in prop {
       (usernames: List[String]) => {
-        val userService = (new MockUserRegistry {}).userService
         var counter = 0
         val resultInsertingUsernames: Boolean = usernames.foldLeft(true) {
           (oldValue: Boolean, username: String) =>
-            val userValidation: UserValidation = userService.insertUser(username, Crypto.sign("user1"), "Diego", "Fabbro", AuthenticationMethod.UserPassword, "userpass")
+            val userValidation: UserValidation = userService.insertUser(username, "test", "Diego", "Fabbro", AuthenticationMethod.UserPassword, "userpass")
             if ("".equals(username)) {
               "Wrong values".equals(userValidation.errorMessage) && !userValidation.result && userValidation.user.isEmpty
             } else {
@@ -57,41 +54,47 @@ class UserSpec extends Specification with ScalaCheck {
                 (!userValidation.result && userValidation.errorMessage.contains("already exists") && userValidation.user.isEmpty)
             }
         }
+//                classify(counter < 1, "less 1 insert") {
+//
+//                  classify(counter < 50, "less 50 insert", "over 50 insert") {
+//
+//                    resultInsertingUsernames
+//                  }
+//                }
+        import org.scalacheck.Prop._
 
-        //        classify(counter < 1, "less 1 insert") {
-        //
-        //          classify(counter < 50, "less 50 insert", "over 50 insert") {
-        //
-        //            resultInsertingUsernames
-        //          }
-        //        }
-
+        if (counter > 69) println(counter)
         val names = usernames.map(value => {
           if ("".equals(value)) "blank"
           else value
         }).mkString(",")
         classify(counter == 0, s"no insert and size ${usernames.length} (values:$names)") {
-          collect(((counter + 9) / 10) * 10) {
-
+          collect(getLabel(((counter + 9) / 10) * 10)) {
             resultInsertingUsernames
           }
         }
       }
     }
   }
+
+  def getLabel(value: Int) = {
+    value match {
+      case 0 => s"0 inserts"
+      case v => s"[${v - 9}-$v inserts]"
+    }
+  }
 }
 
-class MockUserRepository extends it.sf.repository.UserRepository {
+class MockUserRepository extends UserRepositoryInterface {
   var mutableList = mutable.LinkedList[User]()
-
   override def dbInsertUser(user: User): Long = {
     mutableList = mutableList.+:(user)
-    //    println(mutableList.size)
     mutableList.size
   }
 
+
+
   override def dbFindUserByUserName(username: String): Option[User] = {
-    //    println(username)
     val filter: mutable.LinkedList[User] = mutableList.filter(_.username.equals(username))
     if (filter.size > 0) {
       Some(filter.head)
@@ -99,9 +102,20 @@ class MockUserRepository extends it.sf.repository.UserRepository {
       None
     }
   }
+
+  //  val users: lifted.TableQuery[UserTable]
+  override def dbFindUserByUsername(username: String, password: String): Option[User] = ???
+
+  override def dbGetUsersList(): List[User] = ???
+
+  override def dbUpdatePassword(username: String, password: String): Unit = ???
+
+  override def dbFindUsers(ids: Seq[Long]): Seq[User] = ???
+
+  override def dbFindUserById(id: Long): Option[User] = ???
 }
 
 trait MockUserRegistry extends ComponentRegistry {
   override lazy val userRepository = new MockUserRepository
-//  override val userService = new UserService
+  override lazy val userService = new UserService(userRepository)
 }
