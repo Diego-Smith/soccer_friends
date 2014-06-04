@@ -18,5 +18,4 @@ trait ComponentRegistry {
   lazy val pageVisitedRepository = wire[PageVisitedRepository]
   lazy val userInterestRepository = wire[UserInterestRepository]
   lazy val userPendentRequestRepository = wire[UserPendentRequestRepository]
-
 }
